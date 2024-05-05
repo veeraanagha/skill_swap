@@ -1,12 +1,5 @@
 const mongoose = require('mongoose')
 
-const skillSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    }
-});
-
 const userSchema = new mongoose.Schema({
     fname: {
         type: String,
@@ -26,8 +19,14 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
-    skills: [skillSchema],
-    interests: [skillSchema],
+    skills: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Skill'
+    }],
+    interests: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Skill'
+    }],
     matchRequests: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -36,6 +35,9 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    notifications: [{
+        type: String
+    }]
 }, {timestamps: true})
 
 const User = mongoose.model('User', userSchema)

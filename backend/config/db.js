@@ -1,9 +1,12 @@
 const mongoose = require("mongoose");
 
 const connectDB = async() =>{
+    const DB_NAME = 'SkillSwapDB'
+    const DB_URI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.jspv37k.mongodb.net/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`
+    
     try{
-        const connectionInstance = await mongoose.connect(`${process.env.DB_URI}/${process.env.DB_NAME}`)
-        console.log(`\n MONGO DB CONNECTED !!`);
+        const connectionInstance = await mongoose.connect(DB_URI)
+        console.log(`\nMONGO DB CONNECTED !!`);
 
     }catch(err){
         console.log(`MONGODB CONNECTION ERROR: ${err}`);
