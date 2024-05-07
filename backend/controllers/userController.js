@@ -27,7 +27,8 @@ const viewProfile = async (req, res) => {
             fname: thisUser.fname,
             lname: thisUser.lname,
             email: thisUser.email,
-            skills: thisUser.skills.map(element => allSkills.find(skill => skill._id.equals(element)).name)
+            skills: thisUser.skills.map(element => allSkills.find(skill => skill._id.equals(element)).name),
+            interests: thisUser.interests.map(element => allSkills.find(interest => interest._id.equals(element)).name)
         }
         console.log(profile)
         res.status(200).json(profile)
