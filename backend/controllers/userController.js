@@ -1,11 +1,47 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/userModel');
-const Skill = require('../models/skillModel');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
+const User = require('../models/userModel')
+const Skill = require('../models/skillModel')
+const jwt = require('jsonwebtoken')
+const { generateUsername } = require("unique-username-generator")   // https://www.npmjs.com/package/unique-username-generator
 
-//function to register user
-const registerController = (req, res)=> {
-   
+
+async function getUniqueUsername (){
+    let username, condition
+    do {
+        username = generateUsername("", 0, 15)
+        condition = await User.findOne({username})
+    } while(condition)
+    return username
+} 
+
+
+
+const registerUser = async (req, res)=> {
+    const username = await getUniqueUsername()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    try {
+        if(
+            req.body.fname && req.body.fname.length < 20 &&
+            req.body.lname && req.body.lname.length < 20 &&
+            req.body.email && emailRegex.test(req.body.email) &&
+            req.body.password && req.body.password.length > 6 && req.body.password.length < 20
+        ) {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10)
+            const newUser = await User.create({
+                ...req.body,
+                password: hashedPassword,
+                username: username
+            })
+            res.status(201).json("User created !")
+        }
+        else {
+            console.log("\nRejected user creation, input criteria not followed !\n")
+        }
+    } catch (err) {
+        res.status(400).json({error:err.message})
+    }
+
 }
 
 
@@ -64,4 +100,4 @@ const getMatches = async (req, res) => {
 
 
 
-module.exports = {registerController, viewProfile, getMatches}
+module.exports = {registerUser, viewProfile, getMatches}

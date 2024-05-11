@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
+    bio: {
+        type: String
+    },
+    username: {
+        type: String,
+        require: true,
+        minlength: 4
+    },
     skills: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Skill'
