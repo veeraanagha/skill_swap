@@ -15,6 +15,27 @@ async function getUniqueUsername (){
 } 
 
 
+const login = async(req, res) => {
+    const userExists = await User.findOne({email:req.body.email})
+    const passwordMatches = await bcrypt.compare(req.body.password, userExists.password)
+    const expiresInMs = 3600000*1  // 1 hr = 3600000 ms
+
+    if(userExists && passwordMatches){
+        const token = jwt.sign(
+            {username:userExists.username, email:userExists.email}, 
+            process.env.SECRET_KEY, 
+            {expiresIn: expiresInMs}
+        )
+        res.cookie('token', token, {httpOnly:true, maxAge: expiresInMs})
+        // console.log(`token : ${token}`)
+        res.status(200).json("User logged in successfully !")
+    }
+    else {
+        res.status(400).json("Invalid user  OR  wrong username-password ")
+    }
+}
+
+
 
 const registerUser = async (req, res)=> {
     const username = await getUniqueUsername()
@@ -100,4 +121,4 @@ const getMatches = async (req, res) => {
 
 
 
-module.exports = {registerUser, viewProfile, getMatches}
+module.exports = {registerUser, viewProfile, getMatches, login}
