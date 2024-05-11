@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {registerUser, viewProfile, getMatches, login} = require('../controllers/userController');
+const {registerUser, viewProfile, getMatches, login, authCheck} = require('../controllers/userController');
 
-router.get('/profile', viewProfile)
-router.get('/matches', getMatches)
-router.get('/login', login)
+router.get('/profile', authCheck, viewProfile)
+router.get('/matches', authCheck, getMatches)
 
+router.post('/login', login)
 router.post('/register', registerUser)
 
 

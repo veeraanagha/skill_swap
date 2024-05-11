@@ -5,11 +5,13 @@ const app = express();
 const userRouter = require('./routes/userRouter');
 const homeRouter = require('./routes/homeRouter');
 const adminRouter = require('./routes/adminRouter');
+const cookieParser = require('cookie-parser')
 const PORT = process.env.PORT;
 
 connectDB();
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.listen(PORT, ()=> {
     console.log("server is running on ", PORT);
