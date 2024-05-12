@@ -102,6 +102,7 @@ const registerUser = async (req, res)=> {
                 password: hashedPassword,
                 username: username
             })
+            console.log("User created !!")
             res.status(201).json("User created !")
         }
         else {
