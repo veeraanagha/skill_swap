@@ -12,6 +12,7 @@ const Register = () => {
 
   const navigate = useNavigate();
 
+// TODO: write check to verify password & renter password matches
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -21,17 +22,16 @@ const Register = () => {
         bio: bio,
         email: email,
         password: password,
-      });
-      console.log('before redirect');
-      if (response.status === 201) {
-        navigate("/user/login"); // Use history.push to redirect
+      })
+      
+      if (response.status === 200) {
+        navigate("/user/login")
       } else {
         console.log("Redirect not working");
       }
 
       console.log('Registration successful', response.data);
-      // Optionally, you can redirect the user to another page upon successful registration
-      // history.push('/dashboard');
+      
     } catch (error) {
       console.error('Registration failed', error.response.data);
       // Handle error (e.g., show error message to user)

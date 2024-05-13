@@ -74,9 +74,9 @@ const login = async(req, res) => {
     if(userExists && passwordMatches){
         const token = tokenize(userExists.username, userExists.email, expiresInMs)
         res.cookie('token', token, {httpOnly:true, maxAge: expiresInMs})
-        console.log("User logged in successfully.")
         // console.log(`token : ${token}`)
         res.status(200).json("User logged in successfully !")
+        console.log("\nUser logged in successfully.\n")
     }
     else {
         res.status(400).json("Invalid user  OR  wrong username-password ")
@@ -103,7 +103,7 @@ const registerUser = async (req, res)=> {
                 username: username
             })
             console.log("User created !!")
-            res.status(201).json("User created !")
+            res.status(200).json("User created !")
         }
         else {
             console.log("\nRejected user creation, input criteria not followed !\n")
