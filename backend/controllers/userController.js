@@ -106,7 +106,8 @@ const registerUser = async (req, res)=> {
             res.status(201).json("User created !")
         }
         else {
-            return res.status(401).send({message: "\nRejected user creation, input criteria not followed !\n"})
+            console.log("\nRejected user creation, input criteria not followed !\n")
+            return res.status(401).send({message: "Rejected user creation, input criteria not followed !"})
         }
     } catch (err) {
         res.status(400).json({error:err.message})
