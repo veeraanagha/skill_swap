@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import PageHeading from './PageHeading';
 
 const Login = () => {
 
@@ -32,10 +33,10 @@ const Login = () => {
     };
 
     return (
-        <form className="max-w-sm mx-auto py-10">
+        <form className="min-w-96 max-w-sm mx-auto py-10">
 
 
-            <h1 className="py-5 mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Login</h1>
+            <PageHeading>Login</PageHeading>
 
 
             <div className="mb-5">

@@ -7,9 +7,11 @@ function App() {
  
   return (
     <>
+    <div className='bg-sky-100 dark:bg-slate-950 min-h-screen relative flex justify-between flex-col'>
       <Navbar />
       <Outlet/>
       <Footer />
+    </div>
     </>
   )
 }

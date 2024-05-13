@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import PageHeading from './PageHeading';
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -39,10 +40,10 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto py-10">
+    <div className="min-w-96 max-w-md mx-auto py-10">
 
 
-      <h1 className="py-5 mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Register</h1>
+      <PageHeading>Register</PageHeading>
 
 
 
