@@ -1,8 +1,10 @@
-const bcrypt = require('bcrypt')
-const User = require('../models/userModel')
-const Skill = require('../models/skillModel')
-const jwt = require('jsonwebtoken')
-const { generateUsername } = require("unique-username-generator")   // https://www.npmjs.com/package/unique-username-generator
+const bcrypt = require('bcrypt');
+const User = require('../models/userModel');
+const Skill = require('../models/skillModel');
+const authCheck = require('../middlewares/authCheck');
+const jwt = require('jsonwebtoken');
+const tokenize = require('../utils/tokenizer');
+const { generateUsername } = require("unique-username-generator");   // https://www.npmjs.com/package/unique-username-generator
 
 
 async function getUniqueUsername (){
@@ -13,57 +15,6 @@ async function getUniqueUsername (){
     } while(condition)
     return username
 } 
-
-
-function tokenize(username, email, timeInMs){
-    const token = jwt.sign(
-        {username, email}, 
-        process.env.SECRET_KEY, 
-        {expiresIn: timeInMs}
-    )
-    return token
-}
-
-
-function detokenize(token){
-    const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
-    return decodedToken
-}
-
-
-const authCheck = async (req, res, next) => {
-    if(req.cookies === undefined) {
-        console.log("Cookies undefined, redirecting to login page.")
-        return res.status(300).redirect('/login')
-    }
-
-    const token = req.cookies.token
-
-    try {
-        const decodedToken = detokenize(token)
-
-        const userExists = await User.findOne({email:decodedToken.email, username:decodedToken.username})
-
-        if(userExists) console.log("\nSession authenticated successfully\n")
-
-        next()
-
-    } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-            console.error("\nToken expired\n")
-
-            res.clearCookie('token')
-            res.status(200).json({ message: "Session expired, please login again." })
-        }
-        else{
-            console.error("\nFailed to verify token:", error)
-    
-            // Handle invalid token error
-            res.status(401).json({ error: "Unauthorized" })
-        }
-        // HANDLE REDIRECT TO LOGIN PAGE IN FRONTEND !!
-    }
-}
 
 
 const login = async(req, res) => {
