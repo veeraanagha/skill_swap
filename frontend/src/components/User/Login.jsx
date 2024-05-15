@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import PageHeading from './PageHeading';
+import PageHeading from '../utils/PageHeading';
 
 const Login = () => {
 
@@ -19,15 +19,15 @@ const Login = () => {
             })
 
             if (response.status === 200) {
-                navigate("/user/profile")
+                console.log('Logged in successfully - fe', response.data)
+                // navigate("/user/profile")
             } else {
                 console.log("Redirect not working")
             }
 
-            console.log('Logged in successfully - fe', response.data)
 
         } catch (error) {
-            console.error('Login failed', error.message)
+            console.error('Login failed', error.response.data)
             // Handle error (e.g., show error message to user)
         }
     };
@@ -35,9 +35,7 @@ const Login = () => {
     return (
         <form className="min-w-96 max-w-sm mx-auto py-10">
 
-
             <PageHeading>Login</PageHeading>
-
 
             <div className="mb-5">
                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

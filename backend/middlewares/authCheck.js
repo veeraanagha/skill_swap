@@ -4,11 +4,11 @@ const User = require('../models/userModel');
 const authCheck = async (req, res, next) => {
     if(req.cookies === undefined) {
         console.log("Cookies undefined, redirecting to login page.")
-        return res.status(300).redirect('/login')
+        return res.status(300).json("Cookies undefined, redirecting to login page!")
     }
 
     const token = req.cookies.token
-    
+    console.log(req.cookies)
     try {
         const decodedToken = detokenize(token)
         
@@ -32,7 +32,7 @@ const authCheck = async (req, res, next) => {
             console.error("\nInvalid token OR No token found\n")
 
             res.clearCookie('token')
-            res.status(200).json({ message: "Please login first to view this page." })
+            res.status(300).json({ message: "Please login first to view this page." })
         }
         else{
             console.error("\nFailed to verify token:", error)

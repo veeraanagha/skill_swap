@@ -1,5 +1,5 @@
 import React from 'react';
-import bulb from '../assets/logo.png'
+import bulb from '../../assets/logo.png'
 
 function Footer() {
   return (

@@ -3,10 +3,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Register from "./components/Register.jsx";
-import Login from "./components/Login.jsx";
-import Test from "./components/Test.jsx";
-import User from "./User.jsx";
+import Register from "./components/User/Register.jsx";
+import Login from "./components/User/Login.jsx";
+import Home from "./components/Home/Home.jsx";
+import User from "./components/User/User.jsx";
+import Profile from "./components/User/Profile/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/user/profile",
-            element: <Register />,//
+            element: <Profile />,//
           },
           {
             path: "/user/update-profile",
@@ -36,8 +37,8 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: "/test",
-        element: <Test />,
+        path: "/home",
+        element: <Home />,
       }
     ],
   },
