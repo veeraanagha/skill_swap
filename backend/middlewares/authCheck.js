@@ -16,9 +16,10 @@ const authCheck = async (req, res, next) => {
 
         if(userExists) console.log("\nSession authenticated successfully\n")
 
-        // auth gets user id of indv and passes it to next middleware attraching it to request.
-        req.body._id = userExists._id   
 
+        // auth gets user id of indv and passes it to next middleware attraching it to request.
+        req.body._id = userExists._id  
+        req.user = userExists
         next()
 
     } catch (error) {
@@ -26,7 +27,7 @@ const authCheck = async (req, res, next) => {
             console.error("\nToken expired\n")
 
             res.clearCookie('token')
-            res.status(200).json({ message: "Session expired, please login again." })
+            return res.status(200).json({ message: "Session expired, please login again." })
         }
         else if(error.name === 'JsonWebTokenError'){
             console.error("\nInvalid token OR No token found\n")
@@ -38,7 +39,7 @@ const authCheck = async (req, res, next) => {
             console.error("\nFailed to verify token:", error)
     
             // Handle invalid token error
-            res.status(401).json({ error: "Unauthorized" })
+            return res.status(401).send({ error: "Unauthorized" })
         }
         // HANDLE REDIRECT TO LOGIN PAGE IN FRONTEND !!
     }
