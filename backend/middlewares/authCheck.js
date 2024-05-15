@@ -28,6 +28,12 @@ const authCheck = async (req, res, next) => {
             res.clearCookie('token')
             res.status(200).json({ message: "Session expired, please login again." })
         }
+        else if(error.name === 'JsonWebTokenError'){
+            console.error("\nInvalid token OR No token found\n")
+
+            res.clearCookie('token')
+            res.status(200).json({ message: "Please login first to view this page." })
+        }
         else{
             console.error("\nFailed to verify token:", error)
     
