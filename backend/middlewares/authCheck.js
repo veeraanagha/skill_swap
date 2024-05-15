@@ -1,4 +1,5 @@
 const detokenize = require('../utils/detokenizer');
+const User = require('../models/userModel');
 
 const authCheck = async (req, res, next) => {
     if(req.cookies === undefined) {
@@ -7,13 +8,16 @@ const authCheck = async (req, res, next) => {
     }
 
     const token = req.cookies.token
-
+    
     try {
         const decodedToken = detokenize(token)
-
+        
         const userExists = await User.findOne({email:decodedToken.email, username:decodedToken.username})
 
         if(userExists) console.log("\nSession authenticated successfully\n")
+
+        // auth gets user id of indv and passes it to next middleware attraching it to request.
+        req.body._id = userExists._id   
 
         next()
 

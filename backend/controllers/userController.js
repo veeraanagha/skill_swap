@@ -7,24 +7,24 @@ const tokenize = require('../utils/tokenizer');
 const { generateUsername } = require("unique-username-generator");   // https://www.npmjs.com/package/unique-username-generator
 
 
-async function getUniqueUsername (){
+async function getUniqueUsername() {
     let username, condition
     do {
         username = generateUsername("", 0, 15)
-        condition = await User.findOne({username})
-    } while(condition)
+        condition = await User.findOne({ username })
+    } while (condition)
     return username
-} 
+}
 
 
-const login = async(req, res) => {
-    const userExists = await User.findOne({email:req.body.email})
+const login = async (req, res) => {
+    const userExists = await User.findOne({ email: req.body.email })
     const passwordMatches = await bcrypt.compare(req.body.password, userExists.password)
-    const expiresInMs = 3600000*1  // 1 hr = 3600000 ms
+    const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
 
-    if(userExists && passwordMatches){
+    if (userExists && passwordMatches) {
         const token = tokenize(userExists.username, userExists.email, expiresInMs)
-        res.cookie('token', token, {httpOnly:true, maxAge: expiresInMs})
+        res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs })
         // console.log(`token : ${token}`)
         res.status(200).json("User logged in successfully !")
         console.log("\nUser logged in successfully.\n")
@@ -36,12 +36,12 @@ const login = async(req, res) => {
 
 
 
-const registerUser = async (req, res)=> {
+const registerUser = async (req, res) => {
     const username = await getUniqueUsername()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
     try {
-        if(
+        if (
             req.body.fname && req.body.fname.length < 20 &&
             req.body.lname && req.body.lname.length < 20 &&
             req.body.email && emailRegex.test(req.body.email) &&
@@ -58,24 +58,34 @@ const registerUser = async (req, res)=> {
         }
         else {
             console.log("\nRejected user creation, input criteria not followed !\n")
-            return res.status(401).send({message: "Rejected user creation, input criteria not followed !"})
+            return res.status(401).send({ message: "Rejected user creation, input criteria not followed !" })
         }
     } catch (err) {
-        res.status(400).json({error:err.message})
+        res.status(400).json({ error: err.message })
     }
 
 }
 
 
-// fetch a profile using ID 
+// fetch a profile using ID or username
 const viewProfile = async (req, res) => {
     try {
         // Fetching list of skills
         const allSkills = await Skill.find()
 
-        // Finding user by ID
-        const thisUser = await User.findOne({ _id: req.body._id })
-        
+        let query = ""
+
+        if (req.body._id) {
+            query = { _id: req.body._id };
+        } else if (req.body.username) {
+            query = { username: req.body.username };
+        }
+
+        let thisUser
+        if(query)
+        thisUser = await User.findOne(query);
+
+
         if (!thisUser) {
             return res.status(404).json({ error: 'User not found' })
         }
@@ -88,7 +98,7 @@ const viewProfile = async (req, res) => {
             interests: thisUser.interests.map(element => allSkills.find(interest => interest._id.equals(element)).name)
         }
         res.status(200).json(profile)
-    } catch(err) {
+    } catch (err) {
         console.log("\nFailed to fetch user details !\n")
         res.status(400).json({ error: err.message })
     }
@@ -100,11 +110,11 @@ const getMatches = async (req, res) => {
     try {
         const thisUser = await User.findOne({ _id: req.body._id })
 
-        const matchList = await Promise.all(thisUser.matches.map(id => User.findOne({_id:id})))
+        const matchList = await Promise.all(thisUser.matches.map(id => User.findOne({ _id: id })))
         const matches = matchList.map(match => {
-            return{
-                name:`${match.fname} ${match.lname}`,
-                id:match._id
+            return {
+                name: `${match.fname} ${match.lname}`,
+                id: match._id
             }
         })
         console.log(matches)
@@ -114,7 +124,7 @@ const getMatches = async (req, res) => {
         } else {
             res.status(200).json("No matches yet :(");
         }
-    } catch(err) {
+    } catch (err) {
         console.log("\nError finding matches !\n")
         res.status(400).json({ error: err.message })
     }
@@ -122,4 +132,4 @@ const getMatches = async (req, res) => {
 
 
 
-module.exports = {registerUser, viewProfile, getMatches, login, authCheck}
+module.exports = { registerUser, viewProfile, getMatches, login, authCheck }
