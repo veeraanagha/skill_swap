@@ -18,20 +18,28 @@ async function getUniqueUsername() {
 
 
 const login = async (req, res) => {
-    const userExists = await User.findOne({ email: req.body.email })
-    const passwordMatches = await bcrypt.compare(req.body.password, userExists.password)
-    const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
-
-    if (userExists && passwordMatches) {
-        const token = tokenize(userExists.username, userExists.email, expiresInMs)
-        res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs })
-        // console.log(`token : ${token}`)
-        res.status(200).json("User logged in successfully !")
-        console.log("\nUser logged in successfully.\n")
-    }
-    else {
-        res.status(400).json("Invalid user  OR  wrong username-password ")
-    }
+    try{
+        const userExists = await User.findOne({ email: req.body.email })
+        if(!userExists){
+            return res.status(401).send("User does not exist")
+        }
+        const passwordMatches = await bcrypt.compare(req.body.password, userExists.password)
+        if(!passwordMatches){
+            return res.status(401).send("wrong password or email address")
+        }
+        const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
+        if (userExists && passwordMatches) {
+            const token = tokenize(userExists.username, userExists.email, expiresInMs)
+            res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs })
+            // console.log(`token : ${token}`)
+            console.log("\nUser logged in successfully.\n")
+            return res.status(200).json({token})
+        }else {
+            return res.status(400).json("Invalid user  OR  wrong username-password ")
+         }
+    } catch(e){
+        return res.status(500).send(e);   
+    }   
 }
 
 
@@ -119,7 +127,7 @@ const getMatches = async (req, res) => {
         })
         console.log(matches)
 
-        if (matches.length > 0) {
+        if  (matches.length > 0) {
             res.status(200).json(matches);
         } else {
             res.status(200).json("No matches yet :(");
@@ -130,6 +138,17 @@ const getMatches = async (req, res) => {
     }
 }
 
+const editUserProfile = async(req, res) => {
+    const {fname, lname, email, username, bio} = req.body;
+    const userId = req.user._id;
+    try{
+        const updatedUser = await User.findByIdAndUpdate(userId, { fname, lname, username, bio, email }, { new: true });
 
+        return res.status(200).json({ message: 'Profile updated successfully'});
+    } catch(e){
+        return res.status(500).send(e);
+    }
+} 
 
-module.exports = { registerUser, viewProfile, getMatches, login, authCheck }
+module.exports = {registerUser, viewProfile, getMatches, login, authCheck, editUserProfile}
+
