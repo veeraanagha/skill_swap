@@ -4,6 +4,9 @@ import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PageHeading from '../utils/PageHeading';
 
+Axios.defaults.withCredentials = true;
+
+
 const Login = () => {
 
     const [email, setEmail] = useState('')

@@ -8,6 +8,10 @@ import Login from "./components/User/Login.jsx";
 import Home from "./components/Home/Home.jsx";
 import User from "./components/User/User.jsx";
 import Profile from "./components/User/Profile/Profile.jsx";
+import Axios from 'axios';
+
+Axios.defaults.withCredentials = true;
+
 
 const router = createBrowserRouter([
   {
