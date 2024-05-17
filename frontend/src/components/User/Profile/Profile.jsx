@@ -2,6 +2,10 @@ import { React, useEffect } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+Axios.defaults.withCredentials = true;
+
+
+
 const Profile = () => {
     const propName = 'font-bold'
     const keyValPair = "w-full flex justify-between"
@@ -11,7 +15,7 @@ const Profile = () => {
         const handleFetch = async () => {
             try {
                 // Make GET request to fetch profile data
-                const response = await Axios.get('http://localhost:3000/user/profile');
+                const response = await Axios.post('http://localhost:3000/user/profile');
 
                 if (response.status === 200) {
                     console.log('Profile fetched successfully:', response.data);

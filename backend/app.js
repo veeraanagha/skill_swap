@@ -13,7 +13,19 @@ connectDB();
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({
+    origin: function(origin, callback) {
+        // Allow requests from all origins when in development
+        // Replace this condition with your actual production origin check
+        if (!origin || origin.startsWith('http://localhost')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
+
 
 app.listen(PORT, ()=> {
     console.log("server is running on ", PORT);
