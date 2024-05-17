@@ -98,12 +98,23 @@ const viewProfile = async (req, res) => {
             return res.status(404).json({ error: 'User not found' })
         }
 
+        const matchNames = await Promise.all(
+            thisUser.matches.map(async (element) => {
+                const user = await User.findOne({ _id: element })
+                return user.fname
+            })
+        )
+        
+
         const profile = {
             fname: thisUser.fname,
             lname: thisUser.lname,
+            username: thisUser.username,
             email: thisUser.email,
             skills: thisUser.skills.map(element => allSkills.find(skill => skill._id.equals(element)).name),
-            interests: thisUser.interests.map(element => allSkills.find(interest => interest._id.equals(element)).name)
+            interests: thisUser.interests.map(element => allSkills.find(interest => interest._id.equals(element)).name),
+            matches: matchNames,
+            bio: thisUser.bio
         }
         res.status(200).json(profile)
     } catch (err) {
