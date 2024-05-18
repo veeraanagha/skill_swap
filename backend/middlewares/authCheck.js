@@ -16,7 +16,6 @@ const authCheck = async (req, res, next) => {
 
         if(userExists) console.log("\nSession authenticated successfully\n")
 
-
         // auth gets user id of indv and passes it to next middleware attraching it to request.
         req.body._id = userExists._id  
         req.user = userExists

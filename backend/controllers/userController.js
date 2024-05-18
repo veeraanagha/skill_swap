@@ -161,5 +161,70 @@ const editUserProfile = async(req, res) => {
     }
 } 
 
-module.exports = {registerUser, viewProfile, getMatches, login, authCheck, editUserProfile}
+const updateUserSkills = async(req, res)=> {
+    try{
+        const userId = req.params.userId;
+        let { skills } = req.body;
+
+        if (!userId || !skills) {
+           return res.status(400).json({ success: false, message: 'Missing required fields.' });
+        }
+        if (!Array.isArray(skills)) {
+            skills = [skills]; // Convert to array with single element
+          }
+          const skillObjects = await Promise.all(skills.map(async skillName => {
+            const skill = await Skill.findOne({ name: skillName });
+            if (skill) {
+              return skill._id; // Return the ObjectId of the existing skill
+            }
+          }));
+
+          // Remove any undefined elements from the array
+          const existingSkillIds = skillObjects.filter(Boolean);
+          await User.findByIdAndUpdate(userId, {
+            $addToSet: { skills: existingSkillIds }
+          });
+      
+          return res.status(200).send({ success: true, message: 'Skills and interests updated successfully.' });
+    } catch(error){
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
+const updateUserInterests = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        let { interests } = req.body;
+
+        if (!userId || !interests) {
+            return res.status(400).json({ success: false, message: 'Missing required fields.' });
+        }
+
+        if (!Array.isArray(interests)) {
+            interests = [interests]; // Convert to array with single element
+        }
+
+        const skillObjects = await Promise.all(interests.map(async interestName => {
+            const skill = await Skill.findOne({ name: interestName });
+            if (skill) {
+                return skill._id; // Return the ObjectId of the existing skill
+            }
+        }));
+
+        // Remove any undefined elements from the array
+        const existingInterestIds = skillObjects.filter(Boolean);
+        await User.findByIdAndUpdate(userId, {
+            $addToSet: { interests: existingInterestIds }
+        });
+
+        return res.status(200).send({ success: true, message: 'Interests updated successfully.' });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send(error);
+    }
+}
+
+
+module.exports = {registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests}
 
