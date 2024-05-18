@@ -1,0 +1,7 @@
+.bg-light-mode {
+    background-image: url('./assets/backgrounds/mesh-light.png')
+}
+
+.bg-dark-mode {
+    background-image: url('./assets/backgrounds/mesh-dark.png')
+}

@@ -22,10 +22,10 @@ const Login = () => {
             })
 
             if (response.status === 200) {
-                console.log('Logged in successfully - fe', response.data)
-                // navigate("/user/profile")
+                console.log('Logged in successfully.', response.data)
+                navigate("/user/profile")
             } else {
-                console.log("Redirect not working")
+                console.log("Redirect not working!")
             }
 
 

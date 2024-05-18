@@ -27,19 +27,19 @@ const authCheck = async (req, res, next) => {
             console.error("\nToken expired\n")
 
             res.clearCookie('token')
-            return res.status(200).json({ message: "Session expired, please login again." })
+            return res.status(200).json({ message: "Session expired, please login again !" })
         }
         else if(error.name === 'JsonWebTokenError'){
-            console.error("\nInvalid token OR No token found\n")
+            console.error("\nInvalid token OR No token found !\n")
 
-            // res.clearCookie('token')
-            res.status(300).json({ message: "Please login first to view this page." })
+            res.clearCookie('token')
+            res.status(400).json({ message: "Please login first to view this page !" })
         }
         else{
             console.error("\nFailed to verify token:", error)
     
             // Handle invalid token error
-            return res.status(401).send({ error: "Unauthorized" })
+            return res.status(400).send({ error: "Unauthorized !" })
         }
         // HANDLE REDIRECT TO LOGIN PAGE IN FRONTEND !!
     }

@@ -15,7 +15,8 @@ const Register = () => {
 
 // TODO: write check to verify password & renter password matches
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    
     try {
       const response = await Axios.post('http://localhost:3000/user/register', {
         fname: firstName,

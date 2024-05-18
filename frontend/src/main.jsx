@@ -32,7 +32,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/user/profile",
-            element: <Profile />,//
+            element: <Profile />,
           },
           {
             path: "/user/update-profile",
