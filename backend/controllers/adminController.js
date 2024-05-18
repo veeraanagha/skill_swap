@@ -41,9 +41,6 @@ const addSkill = async (req, res) => {
 }
 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!   USE WITH CAUTION   !!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const deleteAllUsers = async (req, res) => {
     try {
         if (req.body.confirmation === "YES") {
@@ -62,7 +59,16 @@ const deleteAllUsers = async (req, res) => {
     }
 }
 
+const getAUser = async (req, res)=> {
+    try{
+        const {email} = req.body
+        const user = await User.findOne({email})
+        return res.status(200).json(user)
 
+    }catch(error){
+        return res.status(500).send(error)
+    }
+}
 
 const randm = (max) => {
     return Math.floor(Math.random() * max);
@@ -152,4 +158,4 @@ const setRandomSkillsAndMatches = async (req, res) => {
     }
 }
 
-module.exports = { showAllSkills, showAllUsers, addUser, addSkill, deleteAllUsers, setRandomSkillsAndMatches }
+module.exports = { showAllSkills, showAllUsers, addUser, addSkill, deleteAllUsers, getAUser, setRandomSkillsAndMatches }
