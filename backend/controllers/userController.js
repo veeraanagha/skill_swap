@@ -18,13 +18,13 @@ async function getUniqueUsername() {
 
 
 const login = async (req, res) => {
-    try{
+    try {
         const userExists = await User.findOne({ email: req.body.email })
-        if(!userExists){
+        if (!userExists) {
             return res.status(401).send("User does not exist")
         }
         const passwordMatches = await bcrypt.compare(req.body.password, userExists.password)
-        if(!passwordMatches){
+        if (!passwordMatches) {
             return res.status(401).send("wrong password or email address")
         }
         const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
@@ -33,13 +33,13 @@ const login = async (req, res) => {
             res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs })
             // console.log(`token : ${token}`)
             console.log("\nUser logged in successfully.\n")
-            return res.status(200).json({token})
-        }else {
+            return res.status(200).json({ token })
+        } else {
             return res.status(400).json("Invalid user  OR  wrong username-password ")
-         }
-    } catch(e){
-        return res.status(500).send(e);   
-    }   
+        }
+    } catch (e) {
+        return res.status(500).send(e);
+    }
 }
 
 
@@ -90,8 +90,8 @@ const viewProfile = async (req, res) => {
         }
 
         let thisUser
-        if(query)
-        thisUser = await User.findOne(query);
+        if (query)
+            thisUser = await User.findOne(query);
 
 
         if (!thisUser) {
@@ -104,7 +104,7 @@ const viewProfile = async (req, res) => {
                 return user.fname
             })
         )
-        
+
 
         const profile = {
             fname: thisUser.fname,
@@ -138,7 +138,7 @@ const getMatches = async (req, res) => {
         })
         console.log(matches)
 
-        if  (matches.length > 0) {
+        if (matches.length > 0) {
             res.status(200).json(matches);
         } else {
             res.status(200).json("No matches yet :(");
@@ -149,44 +149,48 @@ const getMatches = async (req, res) => {
     }
 }
 
-const editUserProfile = async(req, res) => {
-    const {fname, lname, email, username, bio} = req.body;
+const editUserProfile = async (req, res) => {
+    const { fname, lname, email, username, bio } = req.body;
     const userId = req.user._id;
-    try{
+    try {
         const updatedUser = await User.findByIdAndUpdate(userId, { fname, lname, username, bio, email }, { new: true });
 
-        return res.status(200).json({ message: 'Profile updated successfully'});
-    } catch(e){
-        return res.status(500).send(e);
-    }
-} 
+        res.clearCookie('token')
+        const token = tokenize(username, email)
+        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 * 1 })
 
-const updateUserSkills = async(req, res)=> {
-    try{
+        return res.status(200).json({ message: 'Profile updated successfully' });
+    } catch (e) {
+        return res.status(400).json({message: e});
+    }
+}
+
+const updateUserSkills = async (req, res) => {
+    try {
         const userId = req.params.userId;
         let { skills } = req.body;
 
         if (!userId || !skills) {
-           return res.status(400).json({ success: false, message: 'Missing required fields.' });
+            return res.status(400).json({ success: false, message: 'Missing required fields.' });
         }
         if (!Array.isArray(skills)) {
             skills = [skills]; // Convert to array with single element
-          }
-          const skillObjects = await Promise.all(skills.map(async skillName => {
+        }
+        const skillObjects = await Promise.all(skills.map(async skillName => {
             const skill = await Skill.findOne({ name: skillName });
             if (skill) {
-              return skill._id; // Return the ObjectId of the existing skill
+                return skill._id; // Return the ObjectId of the existing skill
             }
-          }));
+        }));
 
-          // Remove any undefined elements from the array
-          const existingSkillIds = skillObjects.filter(Boolean);
-          await User.findByIdAndUpdate(userId, {
+        // Remove any undefined elements from the array
+        const existingSkillIds = skillObjects.filter(Boolean);
+        await User.findByIdAndUpdate(userId, {
             $addToSet: { skills: existingSkillIds }
-          });
-      
-          return res.status(200).send({ success: true, message: 'Skills and interests updated successfully.' });
-    } catch(error){
+        });
+
+        return res.status(200).send({ success: true, message: 'Skills and interests updated successfully.' });
+    } catch (error) {
         console.log(error)
         return res.status(500).send(error)
     }
@@ -226,5 +230,5 @@ const updateUserInterests = async (req, res) => {
 }
 
 
-module.exports = {registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests}
+module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests }
 
