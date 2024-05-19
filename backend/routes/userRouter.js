@@ -5,8 +5,8 @@ const {registerUser, viewProfile, getMatches, login, authCheck, editUserProfile,
 router.post('/profile', authCheck, viewProfile)
 router.get('/matches', authCheck, getMatches)
 router.put('/profile-update', authCheck, editUserProfile)
-router.put('/:userId/skills-update', authCheck, updateUserSkills)
-router.put('/:userId/interests-update', authCheck, updateUserInterests);
+router.put('/skills-update', authCheck, updateUserSkills)
+router.put('/interests-update', authCheck, updateUserInterests);
 
 
 router.post('/login', login)
