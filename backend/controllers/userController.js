@@ -157,6 +157,9 @@ const editUserProfile = async (req, res) => {
         if (!emailRegex.test(email)) {
             return res.status(400).json({ message: 'Invalid email format' });
         }
+        if(username.length > 15 || username < 4){
+            return res.status(400).json({ message: 'Username should be between 3 and 15 characters in length' }); 
+        }
         const existingUser = await User.findOne({ username: username, _id: { $ne: userId } });
         if (existingUser) {
             return res.status(400).json({ message: 'Username is already taken' });
