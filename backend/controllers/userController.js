@@ -150,9 +150,26 @@ const getMatches = async (req, res) => {
 }
 
 const editUserProfile = async (req, res) => {
-    const { fname, lname, email, username, bio } = req.body;
-    const userId = req.user._id;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     try {
+        const { fname, lname, email, username, bio } = req.body;
+        const userId = req.user._id;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format' });
+        }
+        if(username.length > 15 || username < 4){
+            return res.status(400).json({ message: 'Username should be between 3 and 15 characters in length' }); 
+        }
+        const existingUser = await User.findOne({ username: username, _id: { $ne: userId } });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Username is already taken' });
+        }
+
+        // Check if email is already registered
+        const existingEmail = await User.findOne({ email: email, _id: { $ne: userId } });
+        if (existingEmail) {
+            return res.status(400).json({ message: 'Email is already registered' });
+        }
         const updatedUser = await User.findByIdAndUpdate(userId, { fname, lname, username, bio, email }, { new: true });
 
         res.clearCookie('token')
