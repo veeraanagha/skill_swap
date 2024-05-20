@@ -207,7 +207,7 @@ const editUserProfile = async (req, res) => {
 
 const updateUserSkills = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user._id;
         let { skills } = req.body;
 
         if (!userId || !skills) {
@@ -238,7 +238,7 @@ const updateUserSkills = async (req, res) => {
 
 const updateUserInterests = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user._id;
         let { interests } = req.body;
 
         if (!userId || !interests) {
@@ -248,7 +248,7 @@ const updateUserInterests = async (req, res) => {
         if (!Array.isArray(interests)) {
             interests = [interests]; // Convert to array with single element
         }
-
+        console.log(interests);
         const skillObjects = await Promise.all(interests.map(async interestName => {
             const skill = await Skill.findOne({ name: interestName });
             if (skill) {

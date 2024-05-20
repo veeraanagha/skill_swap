@@ -8,7 +8,9 @@
 /user/register
 /user/profile -- fetch a profile using id
 /user/matches -- provide list of matches
-/user/edit -- update user info like username, fname, lname, email and bio
+/user/profile-update -- update user info like username, fname, lname, email and bio
+/user//:userId/skills-update -- add new skill(s)
+/user/:userId/interests-update -- add new interest(s)
 
 ##admin router
 

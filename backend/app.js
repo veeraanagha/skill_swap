@@ -5,6 +5,7 @@ const app = express();
 const userRouter = require('./routes/userRouter');
 const homeRouter = require('./routes/homeRouter');
 const adminRouter = require('./routes/adminRouter');
+const matchRouter = require('./routes/matchRouter');
 const cookieParser = require('cookie-parser')
 const PORT = process.env.PORT;
 const cors = require('cors')
@@ -30,6 +31,8 @@ app.use(cors({
 app.listen(PORT, ()=> {
     console.log("server is running on ", PORT);
 })
+
+app.use('/matches', matchRouter)
 
 app.use('/user', userRouter)
 
