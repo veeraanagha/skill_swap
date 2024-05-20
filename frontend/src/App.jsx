@@ -4,9 +4,10 @@ import Navbar from './components/utils/Navbar/Navbar.jsx'
 import Footer from './components/utils/Footer.jsx'
 import './App.css'
 import { UserProvider } from './components/utils/UserProvider.jsx'
+import waveyFingerprint from './assets/backgrounds/wavey-fingerprint.svg'
 
 export default function App() {
-  
+
   const [isDarkTheme, setIsDarkTheme] = useState('dark')
   const bgImage = isDarkTheme ? "bg-dark-mode" : "bg-light-mode"
 
@@ -14,13 +15,15 @@ export default function App() {
   return (
     <>
       <UserProvider>
-        <div className={`bg-sky-100 dark:bg-slate-950 min-h-screen relative flex justify-between flex-col bg-cover bg-fixed bg-center w-full ${bgImage}`}>
+        <div className={`bg-sky-100 dark:bg-slate-950 relative bg-cover bg-fixed bg-center w-full ${bgImage}`}>
 
-          <Navbar isDark={isDarkTheme} setIsDark={setIsDarkTheme} />
+          <img src={waveyFingerprint} alt="Overlay Image" className="overlay min-h-screen opacity-35 dark:opacity-10" />
 
-          <Outlet />
-
-          <Footer />
+          <div className="content z-20 min-h-screen relative flex justify-between flex-col">
+            <Navbar isDark={isDarkTheme} setIsDark={setIsDarkTheme} />
+            <Outlet />
+            <Footer />
+          </div>
 
         </div>
       </UserProvider>
