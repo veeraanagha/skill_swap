@@ -1,8 +1,23 @@
 import React from 'react';
 import ThemeToggle from '../ThemeToggle';
 import NavLink from './Navlink';
+import { useUser } from '../UserProvider';
+import { defaultUser } from '../defaultUser';
+import { useNavigate } from 'react-router-dom';
+import Axios from 'axios'
 
-const Navbar = ({isDark, setIsDark}) => {
+const Navbar = ({ isDark, setIsDark }) => {
+
+  const { userData, setUserData } = useUser()
+  const navigate = useNavigate()
+  Axios.defaults.withCredentials = true;
+
+  const handleLogout = async () => {
+    await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`)
+    setUserData({ ...defaultUser })
+    navigate('/user/login')
+  }
+
   return (
     <nav className="select-none border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-700">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -26,7 +41,7 @@ const Navbar = ({isDark, setIsDark}) => {
         <div className="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
           <ul className="flex flex-col items-center font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
             <li>
-              <ThemeToggle isDark={isDark} setIsDark={setIsDark}/>
+              <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
             </li>
 
             <li>
@@ -42,7 +57,15 @@ const Navbar = ({isDark, setIsDark}) => {
             </li>
 
             <li>
-              <NavLink to="/user/login">Log in/out</NavLink>
+              {userData.username === defaultUser.username ? (
+                <NavLink to="/user/login">
+                  Login
+                </NavLink>
+              ) : (
+                <button onClick={handleLogout} className="text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                  Logout
+                </button>
+              )}
             </li>
           </ul>
         </div>

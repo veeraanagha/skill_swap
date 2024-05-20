@@ -3,26 +3,28 @@ import { Link } from 'react-router-dom'
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PageHeading from '../utils/PageHeading';
+import { useUser } from '../utils/UserProvider'
 
 Axios.defaults.withCredentials = true;
 
 
 const Login = () => {
-
+    const { userData, setUserData } = useUser()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await Axios.post('http://localhost:3000/user/login', {
+            const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/login`, {
                 email: email,
                 password: password,
             })
 
             if (response.status === 200) {
                 console.log('Logged in successfully.', response.data)
+                setUserData(response.data)
                 navigate("/user/profile")
             } else {
                 console.log("Redirect not working!")

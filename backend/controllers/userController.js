@@ -19,6 +19,8 @@ async function getUniqueUsername() {
 
 const login = async (req, res) => {
     try {
+        const allSkills = await Skill.find()
+        
         const userExists = await User.findOne({ email: req.body.email })
         if (!userExists) {
             return res.status(401).send("User does not exist")
@@ -27,18 +29,35 @@ const login = async (req, res) => {
         if (!passwordMatches) {
             return res.status(401).send("wrong password or email address")
         }
+        const matchNames = await Promise.all(
+            userExists.matches.map(async (element) => {
+                const user = await User.findOne({ _id: element })
+                return user.username
+            })
+        )
         const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
         if (userExists && passwordMatches) {
             const token = tokenize(userExists.username, userExists.email, expiresInMs)
             res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs })
             // console.log(`token : ${token}`)
             console.log("\nUser logged in successfully.\n")
-            return res.status(200).json({ token })
+            const profile = {
+                fname: userExists.fname,
+                lname: userExists.lname,
+                username: userExists.username,
+                email: userExists.email,
+                skills: userExists.skills.map(element => allSkills.find(skill => skill._id.equals(element)).name),
+                interests: userExists.interests.map(element => allSkills.find(interest => interest._id.equals(element)).name),
+                matches: matchNames,
+                bio: userExists.bio,
+                notifications: userExists.notifications
+            }
+            return res.status(200).json(profile)
         } else {
             return res.status(400).json("Invalid user  OR  wrong username-password ")
         }
     } catch (e) {
-        return res.status(500).send(e);
+        return res.status(500).json({message : e.message})
     }
 }
 
@@ -101,7 +120,7 @@ const viewProfile = async (req, res) => {
         const matchNames = await Promise.all(
             thisUser.matches.map(async (element) => {
                 const user = await User.findOne({ _id: element })
-                return user.fname
+                return user.username
             })
         )
 
@@ -114,7 +133,8 @@ const viewProfile = async (req, res) => {
             skills: thisUser.skills.map(element => allSkills.find(skill => skill._id.equals(element)).name),
             interests: thisUser.interests.map(element => allSkills.find(interest => interest._id.equals(element)).name),
             matches: matchNames,
-            bio: thisUser.bio
+            bio: thisUser.bio,
+            notifications: thisUser.notifications
         }
         res.status(200).json(profile)
     } catch (err) {
@@ -154,22 +174,25 @@ const editUserProfile = async (req, res) => {
     try {
         const { fname, lname, email, username, bio } = req.body;
         const userId = req.user._id;
+
         if (!emailRegex.test(email)) {
             return res.status(400).json({ message: 'Invalid email format' });
         }
+
         if(username.length > 15 || username < 4){
             return res.status(400).json({ message: 'Username should be between 3 and 15 characters in length' }); 
         }
+
         const existingUser = await User.findOne({ username: username, _id: { $ne: userId } });
         if (existingUser) {
             return res.status(400).json({ message: 'Username is already taken' });
         }
 
-        // Check if email is already registered
         const existingEmail = await User.findOne({ email: email, _id: { $ne: userId } });
         if (existingEmail) {
             return res.status(400).json({ message: 'Email is already registered' });
         }
+        
         const updatedUser = await User.findByIdAndUpdate(userId, { fname, lname, username, bio, email }, { new: true });
 
         res.clearCookie('token')
@@ -247,5 +270,16 @@ const updateUserInterests = async (req, res) => {
 }
 
 
-module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests }
+
+const logout = async (req, res) => {
+    try{
+        res.clearCookie('token')
+        res.status(200).json({message : 'Logged out successfully !'})
+    } catch (err) {
+        res.status(400).json({message : "Failed to logout !"})
+    }
+}
+
+
+module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests, logout}
 
