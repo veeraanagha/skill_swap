@@ -4,7 +4,7 @@ const User = require('../models/userModel');
 const authCheck = async (req, res, next) => {
     if(req.cookies === undefined) {
         console.log("Cookies undefined, redirecting to login page.")
-        return res.status(300).json("Cookies undefined, redirecting to login page!")
+        return res.status(300).json("Cookies undefined, redirect to login page!")
     }
 
     const token = req.cookies.token

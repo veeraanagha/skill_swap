@@ -9,6 +9,7 @@ import Home from "./components/Home/Home.jsx";
 import User from "./components/User/User.jsx";
 import Profile from "./components/User/Profile/Profile.jsx";
 import ProfileUpdate from "./components/User/ProfileUpdate/ProfileUpdate.jsx"
+import Swipe from "./components/Swipe/Swipe.jsx";
 import Axios from 'axios';
 
 Axios.defaults.withCredentials = true;
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <Home />,
+      },
+      {
+        path: "/swipe",
+        element: <Swipe />
       }
     ],
   },

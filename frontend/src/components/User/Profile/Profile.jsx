@@ -16,7 +16,7 @@ export default function Profile() {
     useEffect(() => {
         const handleFetch = async () => {
             try {
-                const response = await Axios.post('http://localhost:3000/user/profile')
+                const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/profile`)
 
                 if (response.status === 200) {
                     console.log('Profile fetched successfully:', response.data)

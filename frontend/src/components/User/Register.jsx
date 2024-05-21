@@ -18,7 +18,7 @@ const Register = () => {
     e.preventDefault()
     
     try {
-      const response = await Axios.post('http://localhost:3000/user/register', {
+      const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/register`, {
         fname: firstName,
         lname: lastName,
         bio: bio,
