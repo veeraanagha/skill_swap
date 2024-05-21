@@ -4,6 +4,7 @@ import NavLink from './Navlink';
 import { useUser } from '../UserProvider';
 import { defaultUser } from '../defaultUser';
 import { useNavigate } from 'react-router-dom';
+import Notification from './Notification';
 import Axios from 'axios'
 
 const Navbar = ({ isDark, setIsDark }) => {
@@ -42,6 +43,10 @@ const Navbar = ({ isDark, setIsDark }) => {
           <ul className="flex flex-col items-center font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
             <li>
               <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
+            </li>
+
+            <li>
+              <Notification />
             </li>
 
             <li>

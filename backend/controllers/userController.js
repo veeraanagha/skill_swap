@@ -281,5 +281,15 @@ const logout = async (req, res) => {
 }
 
 
-module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests, logout}
+const getNotifications = async (req, res) => {
+    try{
+        const notifications = req.user.notifications
+        res.status(200).json(notifications.reverse())
+    } catch(err) {
+        res.status(400).json({error : err.message})
+    }
+}
+
+
+module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests, logout, getNotifications}
 

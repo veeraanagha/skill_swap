@@ -16,16 +16,18 @@ const getPotentialMatches = async (req, res) => {
             // rejected: { $not: { $in: [currentUser._id] } }
         }).populate('skills')
 
-        potentialMatchesBySkills = potentialMatchesBySkills.map(person => {
-            return ({
-                fname: person.fname,
-                lname: person.lname,
-                bio: person.bio,
-                username: person.username,
-                skills: person.skills.map(item => item.name),
-                interests: person.interests.map(item => item.name)
+        potentialMatchesBySkills = potentialMatchesBySkills
+            .filter(person => !currentUser.rejected.includes(person._id))
+            .map(person => {
+                return ({
+                    fname: person.fname,
+                    lname: person.lname,
+                    bio: person.bio,
+                    username: person.username,
+                    skills: person.skills.map(item => item.name),
+                    interests: person.interests.map(item => item.name)
+                })
             })
-        })
 
         console.log(potentialMatchesBySkills)
 

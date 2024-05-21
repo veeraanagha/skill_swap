@@ -14,7 +14,7 @@ export default function App() {
   return (
     <>
       <UserProvider>
-        <div className={`bg-sky-100 dark:bg-slate-950 relative bg-cover bg-fixed bg-center w-full ${bgImage}`}>
+        <div className={`overflow-hidden bg-sky-100 dark:bg-slate-950 relative bg-cover bg-fixed bg-center w-full ${bgImage}`}>
 
           <img src={waveyFingerprint} alt="Overlay Image" className="overlay min-h-screen opacity-35 dark:opacity-10" />
 
