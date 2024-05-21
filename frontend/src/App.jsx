@@ -11,11 +11,6 @@ export default function App() {
   const [isDarkTheme, setIsDarkTheme] = useState('dark')
   const bgImage = isDarkTheme ? "bg-dark-mode" : "bg-light-mode"
 
-  const navigate = useNavigate()
-  useEffect(() => {
-    navigate('/home')
-  }, [])
-
   return (
     <>
       <UserProvider>

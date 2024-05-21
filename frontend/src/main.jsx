@@ -8,6 +8,7 @@ import Login from "./components/User/Login.jsx";
 import Home from "./components/Home/Home.jsx";
 import User from "./components/User/User.jsx";
 import Profile from "./components/User/Profile/Profile.jsx";
+import Matches from "./components/User/Matches/Matches.jsx";
 import ProfileUpdate from "./components/User/ProfileUpdate/ProfileUpdate.jsx"
 import Swipe from "./components/Swipe/Swipe.jsx";
 import Axios from 'axios';
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
           {
             path: "/user/profile-update",
             element: <ProfileUpdate />,
+          },
+          {
+            path: "/user/matches",
+            element: <Matches />,
           }
         ]
       },

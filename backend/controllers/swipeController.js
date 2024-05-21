@@ -12,8 +12,8 @@ const getPotentialMatches = async (req, res) => {
             _id: { $not: { $in: [currentUser._id] } },
             skills: { $in: currentUserInterests },
             matchRequests: { $not: { $in: [currentUser._id] } },
-            matches: { $not: { $in: [currentUser._id] } },
-            rejected: { $not: { $in: [currentUser._id] } }
+            matches: { $not: { $in: [currentUser._id] } }
+            // rejected: { $not: { $in: [currentUser._id] } }
         }).populate('skills')
 
         potentialMatchesBySkills = potentialMatchesBySkills.map(person => {
@@ -59,6 +59,8 @@ const swipeAction = async (req, res) => {
                 currentUser.matchRequests = currentUser.matchRequests.filter(id => id !== swipedUser._id)
                 currentUser.matches.push(swipedUser._id)
                 swipedUser.matches.push(currentUser._id)
+                currentUser.notifications.push(`You matched with ${swipedUser.username} !!!`)
+                swipedUser.notifications.push(`You matched with ${currentUser.username} !!!`)
                 await currentUser.save()
                 await swipedUser.save()
                 console.log("User got a match !")

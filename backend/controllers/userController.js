@@ -153,7 +153,7 @@ const getMatches = async (req, res) => {
         const matches = matchList.map(match => {
             return {
                 name: `${match.fname} ${match.lname}`,
-                id: match._id
+                username: match.username
             }
         })
         console.log(matches)
