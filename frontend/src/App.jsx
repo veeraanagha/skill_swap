@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from './components/utils/Navbar/Navbar.jsx'
 import Footer from './components/utils/Footer.jsx'
 import './App.css'
@@ -11,6 +11,10 @@ export default function App() {
   const [isDarkTheme, setIsDarkTheme] = useState('dark')
   const bgImage = isDarkTheme ? "bg-dark-mode" : "bg-light-mode"
 
+  const navigate = useNavigate()
+  useEffect(() => {
+    navigate('/home')
+  }, [])
 
   return (
     <>

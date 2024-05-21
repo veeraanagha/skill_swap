@@ -40,7 +40,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
         }
 
         sendResults()
-
+        
     }, [isAccepted])
 
 
@@ -54,7 +54,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                         alt="Default avatar"
                     />
 
-                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@${currProfile.username}`}</h5>
+                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@${currProfile.username.toLowerCase()}`}</h5>
 
                     <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.fname} ${currProfile.lname}`}</span>
                 </div>

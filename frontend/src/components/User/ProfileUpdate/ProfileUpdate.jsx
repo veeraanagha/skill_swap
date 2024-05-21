@@ -64,22 +64,26 @@ export default function ProfileUpdate() {
 
     return (
         <div className="flex items-center justify-center">
-            <div className="flex flex-col bg-white dark:bg-sky-600 w-96 min-h-72 relative shadow-lg mt-10">
-                <h1 className="text-right font-bold text-3xl p-3">{userData.username}</h1>
+            <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-10">
+                <div className="flex flex-col items-center p-10">
 
-                <button onClick={handleClick} className='rounded-lg border-2 border-black max-w-24'>SAVE</button>
+                    <h1 className=" w-full text-right mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@${userData.username.toLowerCase()}`}</h1>
 
-                <div className="flex flex-col py-3 px-10 text-lg">
-                    {Object.keys(userData).map((myKey, itr) => {
-                        if (!fieldsNotToDisplay.includes(myKey))
-                            return <DataRow
-                                key={itr}
-                                dataType={myKey}
-                                dataVal={userData[myKey]}
-                                preSaveUserData={preSaveUserData}
-                                setPreSaveUserData={setPreSaveUserData}
-                            />
-                    })}
+                    <div className="flex flex-col items-center p-5">
+                        {Object.keys(userData).map((myKey, itr) => {
+                            if (!fieldsNotToDisplay.includes(myKey))
+                                return <DataRow
+                                    key={itr}
+                                    dataType={myKey}
+                                    dataVal={userData[myKey]}
+                                    preSaveUserData={preSaveUserData}
+                                    setPreSaveUserData={setPreSaveUserData}
+                                />
+                        })}
+                    </div>
+
+                    <button onClick={handleClick} className='rounded-lg border-2 border-black min-w-24'>SAVE</button>
+
                 </div>
             </div>
         </div>
