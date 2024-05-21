@@ -4,7 +4,8 @@ export default function NotificationPanel({ userData, handleClick }) {
 
     const blurStyle = {
         backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)'
+        WebkitBackdropFilter: 'blur(10px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
     }
 
 
