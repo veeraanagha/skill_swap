@@ -7,15 +7,18 @@ const UserProfileCard = ({ currProfile, showNext }) => {
 
     const [isAccepted, setIsAccepted] = useState('')
     const { alert, setAlert } = useAlert()
+    const [id, setid] = useState(Date.now());
 
     function handleAccept() {
         console.log("Handling acceptance.")
         setIsAccepted(true)
+        setid(Date.now());
     }
-
+    
     function handleReject() {
         console.log("Handling rejection.")
         setIsAccepted(false)
+        setid(Date.now());
     }
 
     useEffect(() => {
@@ -48,7 +51,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
 
         sendResults()
 
-    }, [isAccepted])
+    }, [id])
 
 
     return (
