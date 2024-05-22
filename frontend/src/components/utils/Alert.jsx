@@ -18,7 +18,7 @@ function Alert() {
             setVisible(false)
         }, 5000)
 
-    }, [alert.type, alert.message])
+    }, [alert.id])
 
     let textColor = alert.type === 'success' ? 'text-green-800' : 'text-red-800'
     let bgColor = alert.type === 'success' ? 'bg-green-400' : 'bg-red-300'
