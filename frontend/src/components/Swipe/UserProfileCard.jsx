@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import maleAvatar from '../../assets/avatar/male-default-avatar.png'
 import Axios from 'axios'
+import { useAlert } from '../utils/AlertProvider'
 
 const UserProfileCard = ({ currProfile, showNext }) => {
 
     const [isAccepted, setIsAccepted] = useState('')
+    const { alert, setAlert } = useAlert()
 
     function handleAccept() {
         console.log("Handling acceptance.")
@@ -28,6 +30,11 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                     })
                     if (response.status === 200) {
                         console.log("Swipe results SUCCESSfully sent to backend.")
+                        console.log(response.data.message)
+                        setAlert({
+                            message: response.data.message,
+                            type: "success"
+                        })
                         showNext()
                     }
                 } catch (err) {
@@ -54,7 +61,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                         alt="Default avatar"
                     />
 
-                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@${currProfile.username.toLowerCase()}`}</h5>
+                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@ ${currProfile.username.toLowerCase()}`}</h5>
 
                     <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.fname} ${currProfile.lname}`}</span>
                 </div>

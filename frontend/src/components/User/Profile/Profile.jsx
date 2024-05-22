@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import DataRow from './DataRow'
 import { useUser } from '../../utils/UserProvider'
 import { defaultUser } from '../../utils/defaultUser'
+import { useAlert } from '../../utils/AlertProvider'
 
 Axios.defaults.withCredentials = true
 
@@ -12,6 +13,7 @@ export default function Profile() {
     const { userData, setUserData } = useUser()
     const navigate = useNavigate()
     const fieldsNotToDisplay = ['notifications', 'matches']
+    const {alert, setAlert} = useAlert()
 
     useEffect(() => {
         const handleFetch = async () => {
@@ -26,10 +28,16 @@ export default function Profile() {
                     })
                 } else {
                     console.log('Fetch not working')
+                    setAlert({
+                        message: "Couldn't fetch profile."
+                    })
                 }
             } catch (error) {
                 if (error.response.status === 400) {
                     console.log('Token is invalid or expired.')
+                    setAlert({
+                        message: "Invalid token !"
+                    })
                 } else {
                     console.error('Fetching profile failed:', error.response.data)
                 }
@@ -58,7 +66,7 @@ export default function Profile() {
             <div className="w-full max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-10">
                 <div className="flex flex-col items-center p-10">
 
-                    <h1 className="text-right mb-1 text-xl font-medium text-gray-900 dark:text-white w-full">{`@${userData.username.toLowerCase()}`}</h1>
+                    <h1 className="text-right mb-1 text-xl font-medium text-gray-900 dark:text-white w-full">{`@ ${userData.username.toLowerCase()}`}</h1>
 
 
                     <div className="flex flex-col items-center p-5">

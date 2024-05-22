@@ -3,6 +3,7 @@ import Axios from 'axios'
 import { defaultUser } from "../utils/defaultUser";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
+import { useAlert } from '../utils/AlertProvider'
 
 Axios.defaults.withCredentials = true
 
@@ -11,6 +12,7 @@ export default function Swipe() {
     const [potentials, setPotentials] = useState([])
     const [index, setIndex] = useState(-1)
     const navigate = useNavigate()
+    const { alert, setAlert } = useAlert()
 
     function showNext() {
         console.log(`index = ${index}, list length = ${potentials.length}`)
@@ -19,13 +21,18 @@ export default function Swipe() {
             console.log("Potential matches list is empty.")
             setCurrProfile(defaultUser)
         }
-        else if(index+1 === potentials.length){
+        else if (index + 1 === potentials.length) {
             console.log("Reached end of list.")
+            setAlert({
+                message: "Reached end of list.",
+                type: "success"
+            })
             setIndex(-1)
             setCurrProfile(defaultUser)
+            navigate('/user/login')
         }
         else {
-            console.log(`Setting card to next profile : ${potentials[index+1].username}`)
+            console.log(`Setting card to next profile : ${potentials[index + 1].username}`)
             setCurrProfile(potentials[index + 1])
             setIndex(index + 1)
         }
@@ -42,13 +49,22 @@ export default function Swipe() {
                 }
                 else if (response.status === 300) {
                     console.log('Redirecting to login page.')
+                    setAlert({
+                        message: "Redirecting to login page."
+                    })
                     navigate('/user/login')
                 }
                 else {
                     console.log(response.status, ' Error fetching potential matches.')
+                    setAlert({
+                        message: "Error fetching potential matches."
+                    })
                 }
             } catch (err) {
                 console.error('Fetching profile failed :', err.message)
+                setAlert({
+                    message: "Unhandled error."
+                })
             }
         }
 

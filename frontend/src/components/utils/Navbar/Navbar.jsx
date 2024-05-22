@@ -6,16 +6,23 @@ import { defaultUser } from '../defaultUser';
 import { useNavigate } from 'react-router-dom';
 import Notification from './Notification';
 import Axios from 'axios'
+import { useAlert } from '../AlertProvider'
+
+Axios.defaults.withCredentials = true
 
 const Navbar = ({ isDark, setIsDark }) => {
 
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
-  Axios.defaults.withCredentials = true;
+  const {alert, setAlert} = useAlert()
 
   const handleLogout = async () => {
     await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`)
     setUserData({ ...defaultUser })
+    setAlert({
+      message: "User logged out.",
+      type: 'success'
+    })
     navigate('/user/login')
   }
 
@@ -46,7 +53,7 @@ const Navbar = ({ isDark, setIsDark }) => {
             </li>
 
             <li>
-              <Notification />
+              {userData.username !== defaultUser.username && <Notification />}
             </li>
 
             <li>

@@ -4,6 +4,7 @@ import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PageHeading from '../utils/PageHeading';
 import { useUser } from '../utils/UserProvider'
+import { useAlert } from '../utils/AlertProvider';
 
 Axios.defaults.withCredentials = true;
 
@@ -13,6 +14,7 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
+    const { alert, setAlert } = useAlert()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,16 +26,29 @@ const Login = () => {
 
             if (response.status === 200) {
                 console.log('Logged in successfully.', response.data)
+                setAlert({
+                    message: 'Logged in successfully.',
+                    type: 'success'
+                })
                 setUserData(response.data)
                 navigate("/user/profile")
+            } else if (response.status === 401) {
+                setAlert({
+                    message: "Wrong email or password."
+                })
             } else {
                 console.log("Redirect not working!")
+                setAlert({
+                    message: "Couldn't redirect to login page."
+                })
             }
 
 
         } catch (error) {
             console.error('Login failed', error.response.data)
-            // Handle error (e.g., show error message to user)
+            setAlert({
+                message: 'Login failed, please retry !'
+            })
         }
     };
 

@@ -5,6 +5,8 @@ import Footer from './components/utils/Footer.jsx'
 import './App.css'
 import { UserProvider } from './components/utils/UserProvider.jsx'
 import waveyFingerprint from './assets/backgrounds/wavey-fingerprint.svg'
+import Alert from './components/utils/Alert.jsx'
+import { AlertProvider } from './components/utils/AlertProvider.jsx'
 
 export default function App() {
 
@@ -13,19 +15,24 @@ export default function App() {
 
   return (
     <>
-      <UserProvider>
-        <div className={`overflow-hidden bg-sky-100 dark:bg-slate-950 relative bg-cover bg-fixed bg-center w-full ${bgImage}`}>
+      <AlertProvider>
+        <UserProvider>
+          <div className={`overflow-hidden bg-sky-100 dark:bg-slate-950 relative bg-cover bg-fixed bg-center w-full ${bgImage}`}>
 
-          <img src={waveyFingerprint} alt="Overlay Image" className="overlay min-h-screen opacity-35 dark:opacity-10" />
+            <img src={waveyFingerprint} alt="Overlay Image" className="overlay min-h-screen opacity-35 dark:opacity-10" />
 
-          <div className="content z-20 min-h-screen relative flex justify-between flex-col">
-            <Navbar isDark={isDarkTheme} setIsDark={setIsDarkTheme} />
-            <Outlet />
-            <Footer />
+            <div className="content z-20 min-h-screen relative flex justify-between flex-col">
+              <Navbar isDark={isDarkTheme} setIsDark={setIsDarkTheme} />
+              <div className='relative'>
+                <Alert />
+                <Outlet />
+              </div>
+              <Footer />
+            </div>
+
           </div>
-
-        </div>
-      </UserProvider>
+        </UserProvider>
+      </AlertProvider>
     </>
   )
 }

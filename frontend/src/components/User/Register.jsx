@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PageHeading from '../utils/PageHeading';
+import { useAlert } from '../utils/AlertProvider'
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -10,13 +11,14 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const {alert, setAlert} = useAlert()
 
   const navigate = useNavigate();
 
-// TODO: write check to verify password & renter password matches
+  // TODO: write check to verify password & renter password matches
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     try {
       const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/register`, {
         fname: firstName,
@@ -25,18 +27,24 @@ const Register = () => {
         email: email,
         password: password,
       })
-      
+
       if (response.status === 200) {
         navigate("/user/login")
       } else {
         console.log("Redirect not working");
       }
 
-      console.log('Registration successful', response.data);
-      
+      console.log('Registration successful', response.data)
+      setAlert({
+        message: "Registration successful.",
+        type: 'success'
+      })
+
     } catch (error) {
-      console.error('Registration failed', error.response.data);
-      // Handle error (e.g., show error message to user)
+      console.error('Registration failed', error.response.data)
+      setAlert({
+        message: "Failed to register user, please try again."
+      })
     }
   };
 
