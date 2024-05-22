@@ -72,7 +72,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                         <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.bio}`}</span>
                     </div>
 
-                    <div>
+                    <div className='flex justify-between my-3'>
                         <span className="text-sm text-black dark:text-black font-bold">Skills : </span>
                         <div className="flex flex-wrap justify-end">
                             {currProfile.skills.map((element, key) => {

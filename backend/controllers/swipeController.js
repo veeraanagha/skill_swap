@@ -66,19 +66,19 @@ const swipeAction = async (req, res) => {
                 await currentUser.save()
                 await swipedUser.save()
                 console.log("User got a match !")
-                return res.status(200).json({ message: `🎉 It's a match with @${currentUser.username} !!` })
+                return res.status(200).json({ message: `🎉 It's a match with @ ${currentUser.username} !!` })
             }
             swipedUser.matchRequests.push(currentUser._id)
             await swipedUser.save()
             console.log("User sent a match request !")
-            return res.status(200).json({ message: `➕ Match request sent to @${currentUser.username} !` })
+            return res.status(200).json({ message: `➕ Match request sent to @ ${currentUser.username} !` })
         }
         // LEFT swipe
         else {
             currentUser.rejected.push(swipedUser._id)
             await currentUser.save()
             console.log("User rejected this pontential match !")
-            return res.status(200).json({ message: `🚫 User Rejected potential match @${currentUser.username} !` })
+            return res.status(200).json({ message: `🚫 User Rejected potential match @ ${currentUser.username} !` })
         }
 
     } catch (error) {
