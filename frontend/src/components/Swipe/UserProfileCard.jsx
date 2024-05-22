@@ -41,13 +41,13 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                     console.error('Sending swipe results to backend FAILED. :', err.message)
                 }
             }
-            else{
+            else {
                 console.log("isAccepted is blank or Default_user is set.")
             }
         }
 
         sendResults()
-        
+
     }, [isAccepted])
 
 
@@ -74,7 +74,11 @@ const UserProfileCard = ({ currProfile, showNext }) => {
 
                     <div>
                         <span className="text-sm text-black dark:text-black font-bold">Skills : </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.skills}`}</span>
+                        <div className="flex flex-wrap justify-end">
+                            {currProfile.skills.map((element, key) => {
+                                return <label key={key} className='rounded-full border-black border-2 mx-2 my-1 py-1 px-3 text-md text-gray-500 dark:text-gray-400'>{element}</label>
+                            })}
+                        </div>
                     </div>
 
                     <div>

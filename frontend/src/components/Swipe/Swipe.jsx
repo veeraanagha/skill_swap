@@ -29,7 +29,7 @@ export default function Swipe() {
             })
             setIndex(-1)
             setCurrProfile(defaultUser)
-            navigate('/user/login')
+            navigate('/user/profile')
         }
         else {
             console.log(`Setting card to next profile : ${potentials[index + 1].username}`)

@@ -5,6 +5,7 @@ import DataRow from './DataRow'
 import { useUser } from '../../utils/UserProvider'
 import { defaultUser } from '../../utils/defaultUser'
 import { useAlert } from '../../utils/AlertProvider'
+import SkillRow from './SkillRow'
 
 Axios.defaults.withCredentials = true
 
@@ -71,8 +72,13 @@ export default function Profile() {
 
                     <div className="flex flex-col items-center p-5">
                         {Object.keys(userData).map((myKey, itr) => {
-                            if (!fieldsNotToDisplay.includes(myKey))
-                                return <DataRow key={itr} dataType={myKey} dataVal={userData[myKey]} />
+                            if (!fieldsNotToDisplay.includes(myKey)){
+                                if(myKey === 'skills' || myKey === 'interests'){
+                                    return <SkillRow key={itr} dataType={myKey} dataVal={userData[myKey]} />
+                                } else {
+                                    return <DataRow key={itr} dataType={myKey} dataVal={userData[myKey]} />
+                                }
+                            }
                         })}
                     </div>
 

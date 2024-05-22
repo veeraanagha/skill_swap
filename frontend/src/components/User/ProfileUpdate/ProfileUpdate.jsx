@@ -5,6 +5,7 @@ import DataRow from './DataRow'
 import { useUser } from '../../utils/UserProvider'
 import { defaultUser } from '../../utils/defaultUser'
 import { useAlert } from '../../utils/AlertProvider'
+import SkillRowEdit from './SkillRowEdit'
 
 Axios.defaults.withCredentials = true
 
@@ -12,7 +13,7 @@ Axios.defaults.withCredentials = true
 export default function ProfileUpdate() {
     const { userData, setUserData } = useUser()
     const [preSaveUserData, setPreSaveUserData] = useState({ ...userData })
-    const {alert, setAlert} = useAlert()
+    const { alert, setAlert } = useAlert()
     const navigate = useNavigate()
     const fieldsNotToDisplay = ['notifications', 'matches']
 
@@ -61,7 +62,7 @@ export default function ProfileUpdate() {
         try {
             const response = await Axios.put(`${import.meta.env.VITE_BACKEND_URL}user/profile-update`, preSaveUserData)
             console.log(response)
-            if(response.status === 200){
+            if (response.status === 200) {
                 console.log("Updated profile successfully.")
                 setAlert({
                     message: "Updated profile successfully.",
@@ -75,19 +76,27 @@ export default function ProfileUpdate() {
                 message: "Error updating profile."
             })
         }
-        
+
     }
 
     return (
         <div className="flex items-center justify-center">
-            <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-10">
+            <div className="w-full max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-10">
                 <div className="flex flex-col items-center p-10">
 
                     <h1 className=" w-full text-right mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@ ${userData.username.toLowerCase()}`}</h1>
 
                     <div className="flex flex-col items-center p-5">
                         {Object.keys(userData).map((myKey, itr) => {
-                            if (!fieldsNotToDisplay.includes(myKey))
+                            if (myKey === 'skills' || myKey === 'interests') {
+                                return <SkillRowEdit
+                                    key={itr}
+                                    dataType={myKey}
+                                    dataVal={userData[myKey]}
+                                    preSaveUserData={preSaveUserData}
+                                    setPreSaveUserData={setPreSaveUserData}
+                                />
+                            } else if (!fieldsNotToDisplay.includes(myKey)) {
                                 return <DataRow
                                     key={itr}
                                     dataType={myKey}
@@ -95,6 +104,7 @@ export default function ProfileUpdate() {
                                     preSaveUserData={preSaveUserData}
                                     setPreSaveUserData={setPreSaveUserData}
                                 />
+                            }
                         })}
                     </div>
 

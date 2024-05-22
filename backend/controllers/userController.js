@@ -110,7 +110,7 @@ const viewProfile = async (req, res) => {
 
         let thisUser
         if (query)
-            thisUser = await User.findOne(query);
+            thisUser = await User.findOne(query).populate('skills').populate('interests');
 
 
         if (!thisUser) {
@@ -130,8 +130,8 @@ const viewProfile = async (req, res) => {
             lname: thisUser.lname,
             username: thisUser.username,
             email: thisUser.email,
-            skills: thisUser.skills.map(element => allSkills.find(skill => skill._id.equals(element)).name),
-            interests: thisUser.interests.map(element => allSkills.find(interest => interest._id.equals(element)).name),
+            skills: thisUser.skills,
+            interests: thisUser.interests,
             matches: matchNames,
             bio: thisUser.bio,
             notifications: thisUser.notifications
