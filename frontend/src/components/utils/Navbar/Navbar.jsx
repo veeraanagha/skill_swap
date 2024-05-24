@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ThemeToggle from '../ThemeToggle';
 import NavLink from './Navlink';
 import { useUser } from '../UserProvider';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Notification from './Notification';
 import Axios from 'axios'
 import { useAlert } from '../AlertProvider'
+import {jwtDecode} from 'jwt-decode'
 
 Axios.defaults.withCredentials = true
 
@@ -14,7 +15,20 @@ const Navbar = ({ isDark, setIsDark }) => {
 
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
-  const {alert, setAlert} = useAlert()
+  const { alert, setAlert } = useAlert()
+  const [token, setToken] = useState(null)
+
+
+  useEffect(() => {
+    const decodedToken = decodeToken()
+    if (decodedToken) {
+      setToken(decodedToken)
+      console.log(decodedToken)
+    } else {
+      console.warn('No valid token found')
+    }
+  }, [userData])
+
 
   const handleLogout = async () => {
     await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`)
@@ -25,6 +39,32 @@ const Navbar = ({ isDark, setIsDark }) => {
     })
     navigate('/user/login')
   }
+
+
+
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`
+    console.log(value)
+    const parts = value.split(`; ${name}=`)
+    if (parts.length === 2) return parts.pop().split(';').shift()
+    return null
+  }
+
+
+  function decodeToken () {
+    const token = getCookie('token')
+    if (!token) {
+      return null
+    }
+    try {
+      const decodedToken = jwtDecode(token)
+      return decodedToken
+    } catch (error) {
+      console.error('Invalid token:', error)
+      return null
+    }
+  }
+
 
   return (
     <nav className="select-none border-gray-200 bg-slate-200 dark:bg-gray-900 dark:border-gray-700">

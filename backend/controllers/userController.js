@@ -38,7 +38,7 @@ const login = async (req, res) => {
         const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
         if (userExists && passwordMatches) {
             const token = tokenize(userExists.username, userExists.email, expiresInMs)
-            res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs })
+            res.cookie('token', token, { httpOnly: false, maxAge: expiresInMs })
             // console.log(`token : ${token}`)
             console.log("\nUser logged in successfully.\n")
             const profile = {
