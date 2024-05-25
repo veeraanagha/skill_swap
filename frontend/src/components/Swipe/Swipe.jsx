@@ -20,6 +20,11 @@ export default function Swipe() {
         if (potentials.length === 0) {
             console.log("Potential matches list is empty.")
             setCurrProfile(defaultUser)
+            setAlert({
+                message: "No potential matches to show currently ☹️  Update your interests or come back later.",
+                type: "success"
+            })
+            navigate('/user/profile')
         }
         else if (index + 1 === potentials.length) {
             console.log("Reached end of list.")

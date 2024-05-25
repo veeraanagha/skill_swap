@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Notification from './Notification';
 import Axios from 'axios'
 import { useAlert } from '../AlertProvider'
-import { jwtDecode } from 'jwt-decode'
+import { checkToken } from '../checkToken';
 
 Axios.defaults.withCredentials = true
 
@@ -16,17 +16,15 @@ const Navbar = ({ isDark, setIsDark }) => {
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
   const { alert, setAlert } = useAlert()
-  const [token, setToken] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 
   useEffect(() => {
-    const decodedToken = decodeToken()
-    if (decodedToken) {
-      setToken(decodedToken)
-      console.log("decoded token : ", decodedToken)
-    } else {
-      console.warn('No valid token found')
-      setToken(null)
+    if(checkToken()){
+      setIsLoggedIn(true)
+    }
+    else{
+      setIsLoggedIn(false)
     }
   }, [userData])
 
@@ -39,31 +37,6 @@ const Navbar = ({ isDark, setIsDark }) => {
       type: 'success'
     })
     navigate('/user/login')
-  }
-
-
-
-  const getCookie = (name) => {
-    const value = `; ${document.cookie}`
-    console.log(value)
-    const parts = value.split(`; ${name}=`)
-    if (parts.length === 2) return parts.pop().split(';').shift()
-    return null
-  }
-
-
-  function decodeToken() {
-    const token = getCookie('token')
-    if (!token) {
-      return null
-    }
-    try {
-      const decodedToken = jwtDecode(token)
-      return decodedToken
-    } catch (error) {
-      console.error('Invalid token:', error)
-      return null
-    }
   }
 
 
@@ -93,24 +66,32 @@ const Navbar = ({ isDark, setIsDark }) => {
               <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
             </li>
 
-            <li>
-              {token && <Notification />}
-            </li>
+            {isLoggedIn &&
+              <li>
+                <Notification />
+              </li>
+            }
+
+            {!isLoggedIn &&
+              <li>
+                <NavLink to="/home">Home</NavLink>
+              </li>
+            }
+
+            {isLoggedIn &&
+              <li>
+                <NavLink to="/swipe">Swipe</NavLink>
+              </li>
+            }
+
+            {isLoggedIn &&
+              <li>
+                <NavLink to="/user/profile">User</NavLink>
+              </li>
+            }
 
             <li>
-              <NavLink to="/home">Home</NavLink>
-            </li>
-
-            <li>
-              {token && <NavLink to="/swipe">Swipe</NavLink>}
-            </li>
-
-            <li>
-              {token && <NavLink to="/user/profile">User</NavLink>}
-            </li>
-
-            <li>
-              {!token ? (
+              {!isLoggedIn ? (
                 <NavLink to="/user/login">
                   Login
                 </NavLink>

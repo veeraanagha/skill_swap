@@ -5,12 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import PageHeading from '../utils/PageHeading';
 import { useUser } from '../utils/UserProvider'
 import { useAlert } from '../utils/AlertProvider';
+import { defaultUser } from '../utils/defaultUser';
 
 Axios.defaults.withCredentials = true;
 
 
 const Login = () => {
-    const { userData, setUserData } = useUser()
+    const { userData, setUserData } = useUser({...defaultUser})
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
@@ -30,7 +31,7 @@ const Login = () => {
                     message: 'Logged in successfully.',
                     type: 'success'
                 })
-                setUserData(response.data)
+                setUserData({...defaultUser, ...response.data})
                 navigate("/user/profile")
             } else if (response.status === 401) {
                 setAlert({
