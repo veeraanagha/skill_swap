@@ -197,7 +197,7 @@ const editUserProfile = async (req, res) => {
 
         res.clearCookie('token')
         const token = tokenize(username, email)
-        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 * 1 })
+        res.cookie('token', token, { httpOnly: false, maxAge: 3600000 * 1 })
 
         return res.status(200).json({ message: 'Profile updated successfully' });
     } catch (e) {

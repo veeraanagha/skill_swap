@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Notification from './Notification';
 import Axios from 'axios'
 import { useAlert } from '../AlertProvider'
-import {jwtDecode} from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 Axios.defaults.withCredentials = true
 
@@ -23,9 +23,10 @@ const Navbar = ({ isDark, setIsDark }) => {
     const decodedToken = decodeToken()
     if (decodedToken) {
       setToken(decodedToken)
-      console.log(decodedToken)
+      console.log("decoded token : ", decodedToken)
     } else {
       console.warn('No valid token found')
+      setToken(null)
     }
   }, [userData])
 
@@ -51,7 +52,7 @@ const Navbar = ({ isDark, setIsDark }) => {
   }
 
 
-  function decodeToken () {
+  function decodeToken() {
     const token = getCookie('token')
     if (!token) {
       return null
@@ -93,7 +94,7 @@ const Navbar = ({ isDark, setIsDark }) => {
             </li>
 
             <li>
-              {userData.username !== defaultUser.username && <Notification />}
+              {token && <Notification />}
             </li>
 
             <li>
@@ -101,15 +102,15 @@ const Navbar = ({ isDark, setIsDark }) => {
             </li>
 
             <li>
-              <NavLink to="/swipe">Swipe</NavLink>
+              {token && <NavLink to="/swipe">Swipe</NavLink>}
             </li>
 
             <li>
-              <NavLink to="/user/profile">User</NavLink>
+              {token && <NavLink to="/user/profile">User</NavLink>}
             </li>
 
             <li>
-              {userData.username === defaultUser.username ? (
+              {!token ? (
                 <NavLink to="/user/login">
                   Login
                 </NavLink>
