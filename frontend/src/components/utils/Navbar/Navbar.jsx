@@ -20,10 +20,10 @@ const Navbar = ({ isDark, setIsDark }) => {
 
 
   useEffect(() => {
-    if(checkToken()){
+    if (checkToken()) {
       setIsLoggedIn(true)
     }
-    else{
+    else {
       setIsLoggedIn(false)
     }
   }, [userData])
@@ -81,6 +81,12 @@ const Navbar = ({ isDark, setIsDark }) => {
             {isLoggedIn &&
               <li>
                 <NavLink to="/swipe">Swipe</NavLink>
+              </li>
+            }
+
+            {isLoggedIn &&
+              <li>
+                <NavLink to="/user/matches">Matches</NavLink>
               </li>
             }
 

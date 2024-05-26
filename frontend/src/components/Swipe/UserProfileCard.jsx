@@ -69,24 +69,28 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                     <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.fname} ${currProfile.lname}`}</span>
                 </div>
 
-                <div className='flex flex-col'>
-                    <div>
-                        <span className="text-sm text-black dark:text-black font-bold">About : </span>
+                <div className='flex flex-col justify-left mt-1'>
+                    <div className='flex flex-col justify-left'>
+                    <span className="text-sm text-black dark:text-black font-bold mb-3">About : </span>
                         <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.bio}`}</span>
                     </div>
 
-                    <div className='flex justify-between my-3'>
-                        <span className="text-sm text-black dark:text-black font-bold">Skills : </span>
-                        <div className="flex flex-wrap justify-end">
+                    <div className='flex flex-col justify-left my-5'>
+                        <span className="text-sm text-black dark:text-black font-bold mb-3">Skills : </span>
+                        <div className="flex flex-wrap justify-left">
                             {currProfile.skills.map((element, key) => {
-                                return <label key={key} className='rounded-full border-black border-2 mx-2 my-1 py-1 px-3 text-md text-gray-500 dark:text-gray-400'>{element}</label>
+                                return <label key={key} className='rounded-full text-black bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium text-sm px-4 py-2 text-center me-2 mb-2'>{element}</label>
                             })}
                         </div>
                     </div>
 
-                    <div>
-                        <span className="text-sm text-black dark:text-black font-bold">Interests : </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.interests}`}</span>
+                    <div className='flex flex-col justify-between'>
+                        <span className="text-sm text-black dark:text-black font-bold mb-3">Interests : </span>
+                        <div className="flex flex-wrap justify-left">
+                            {currProfile.interests.map((element, key) => {
+                                return <label key={key} className='rounded-full text-black bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium text-sm px-4 py-2 text-center me-2 mb-2'>{element}</label>
+                            })}
+                        </div>
                     </div>
                 </div>
 

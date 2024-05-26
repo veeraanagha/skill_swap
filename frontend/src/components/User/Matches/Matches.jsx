@@ -20,6 +20,9 @@ export default function Matches() {
           })
           setMatches(response.data)
         }
+        else if(response.status === 201) {
+          setMatches([])
+        }
       } catch (err) {
         console.log(`${err.message}`)
         setAlert({
@@ -33,13 +36,19 @@ export default function Matches() {
 
   return (
     <div className='flex item-center justify-center w-full'>
-      <div className='max-w-96 flex flex-col'>
+      <div className='max-w-xl flex flex-col my-5'>
         <PageHeading>Matches</PageHeading>
-        <ul className="min-w-96 divide-y divide-gray-200 dark:divide-gray-700">
-          {matches.map((user, index) => (
-            <UserListItem key={index} user={user} />
-          ))}
-        </ul>
+        <div className="w-full min-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-5 p-5 overflow-hidden">
+          <ul className="min-w-96 divide-y divide-gray-200 dark:divide-gray-700">
+            {matches.length > 0 ? (
+              matches.map((user, index) => (
+                <UserListItem key={index} user={user} />
+              ))
+            ) : (
+              <li className="text-center text-gray-500 dark:text-gray-400 py-4">No matches yet  : (</li>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   )

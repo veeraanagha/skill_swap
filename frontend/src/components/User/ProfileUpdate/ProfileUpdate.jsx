@@ -6,10 +6,10 @@ import { useUser } from '../../utils/UserProvider'
 import { defaultUser } from '../../utils/defaultUser'
 import { useAlert } from '../../utils/AlertProvider'
 import SkillRowEdit from './SkillRowEdit'
+import PageHeading from '../../utils/PageHeading'
 
 Axios.defaults.withCredentials = true
 
-// TODO : Handle update for skills and interests
 export default function ProfileUpdate() {
     const { userData, setUserData } = useUser()
     const [preSaveUserData, setPreSaveUserData] = useState({ ...userData })
@@ -20,11 +20,15 @@ export default function ProfileUpdate() {
     useEffect(() => {
         const handleFetch = async () => {
             try {
-                const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/profile`)
+                const response = await Axios.get(`${import.meta.env.VITE_BACKEND_URL}user/profile`)
 
                 if (response.status === 200) {
                     console.log('Profile fetched successfully:', response.data)
                     setUserData({
+                        ...userData,
+                        ...response.data
+                    })
+                    setPreSaveUserData({
                         ...userData,
                         ...response.data
                     })
@@ -80,36 +84,42 @@ export default function ProfileUpdate() {
     }
 
     return (
-        <div className="flex items-center justify-center">
-            <div className="w-full max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-10">
-                <div className="flex flex-col items-center p-10">
+        <div className="flex items-center justify-center w-full">
 
-                    <h1 className=" w-full text-right mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@ ${userData.username.toLowerCase()}`}</h1>
+            <div className='flex flex-col my-5'>
 
-                    <div className="flex flex-col items-center p-5">
-                        {Object.keys(userData).map((myKey, itr) => {
-                            if (myKey === 'skills' || myKey === 'interests') {
-                                return <SkillRowEdit
-                                    key={itr}
-                                    dataType={myKey}
-                                    dataVal={userData[myKey]}
-                                    preSaveUserData={preSaveUserData}
-                                    setPreSaveUserData={setPreSaveUserData}
-                                />
-                            } else if (!fieldsNotToDisplay.includes(myKey)) {
-                                return <DataRow
-                                    key={itr}
-                                    dataType={myKey}
-                                    dataVal={userData[myKey]}
-                                    preSaveUserData={preSaveUserData}
-                                    setPreSaveUserData={setPreSaveUserData}
-                                />
-                            }
-                        })}
+                <PageHeading>Edit Profile</PageHeading>
+
+                <div className="w-full max-w-2xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-5">
+                    <div className="flex flex-col items-center p-10">
+
+                        <h1 className=" w-full text-right mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@ ${userData.username.toLowerCase()}`}</h1>
+                        {console.log('userData keys:', Object.keys(userData))}
+                        <div className="flex flex-col items-center p-5">
+                            {Object.keys(userData).map((myKey, itr) => {
+                                if (myKey === 'skills' || myKey === 'interests') {
+                                    return <SkillRowEdit
+                                        key={itr}
+                                        dataType={myKey}
+                                        dataVal={userData[myKey]}
+                                        preSaveUserData={preSaveUserData}
+                                        setPreSaveUserData={setPreSaveUserData}
+                                    />
+                                } else if (!fieldsNotToDisplay.includes(myKey)) {
+                                    return <DataRow
+                                        key={itr}
+                                        dataType={myKey}
+                                        dataVal={userData[myKey]}
+                                        preSaveUserData={preSaveUserData}
+                                        setPreSaveUserData={setPreSaveUserData}
+                                    />
+                                }
+                            })}
+                        </div>
+
+                        <button onClick={handleClick} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-lg px-7 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>💾 SAVE</button>
+
                     </div>
-
-                    <button onClick={handleClick} className='rounded-lg border-2 border-black min-w-24'>SAVE</button>
-
                 </div>
             </div>
         </div>

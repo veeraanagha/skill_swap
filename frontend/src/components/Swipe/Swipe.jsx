@@ -20,11 +20,6 @@ export default function Swipe() {
         if (potentials.length === 0) {
             console.log("Potential matches list is empty.")
             setCurrProfile(defaultUser)
-            setAlert({
-                message: "No potential matches to show currently ☹️  Update your interests or come back later.",
-                type: "success"
-            })
-            navigate('/user/profile')
         }
         else if (index + 1 === potentials.length) {
             console.log("Reached end of list.")
@@ -79,13 +74,19 @@ export default function Swipe() {
 
     useEffect(() => {
         console.log("Potentials updated : ", potentials)
+        navigate('/swipe')
         showNext()
     }, [potentials])
 
 
     return (
         <div className="flex items-center justify-center">
-            <UserProfileCard currProfile={currProfile} showNext={showNext} />
+            {
+                potentials.length > 0 ?
+                    <UserProfileCard currProfile={currProfile} showNext={showNext} />
+                    :
+                    <div className="text-center text-gray-500 dark:text-gray-400 py-4">You have run out of potential matches ! Come again later or Update you skills & interests.</div>
+            }
         </div>
     )
 }

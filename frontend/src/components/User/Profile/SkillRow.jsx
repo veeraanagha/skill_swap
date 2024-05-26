@@ -1,12 +1,12 @@
 export default function SkillRow({dataType, dataVal}) {
-    const keyValPairCss = "w-full flex justify-between my-2"
+    const keyValPairCss = "w-full flex justify-between my-5"
 
     return (
         <div className={keyValPairCss}>
             <label className='text-lg text-black dark:text-black font-bold mr-6'>{dataType}</label>
             <div className="flex flex-wrap justify-end">
                 {dataVal.map((element, key) => {
-                    return <label key={key} className='rounded-full border-black border-2 mx-2 my-1 py-1 px-3 text-md text-gray-500 dark:text-gray-400'>{element.name}</label>
+                    return <label key={key} className='rounded-full text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium text-sm px-5 py-2.5 text-center me-2 mb-2'>{element.name}</label>
                 })}
             </div>
         </div>
