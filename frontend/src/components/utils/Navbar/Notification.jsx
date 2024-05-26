@@ -1,10 +1,41 @@
 import {useState, useEffect} from 'react'
 import NotifPanel from './NotifPanel'
 import { useUser } from '../../utils/UserProvider'
+import { checkToken } from '../checkToken.js'
+import Axios from 'axios'
+import { defaultUser } from '../defaultUser'
+import { useAlert } from '../AlertProvider'
 
 export default function Notification() {
     const [panelShown, setPanelShown] = useState(false)
     const {userData, setUserData} = useUser()
+    const {alert, setAlert} = useAlert()
+
+
+    useEffect(() => {
+        const fetchNotifs = async() => {
+            try{
+                if(checkToken()) {
+                    const response = await Axios.get(`${import.meta.env.VITE_BACKEND_URL}user/notifications`)
+                    if(response.status === 200) {
+                        setUserData({...userData, ...response.data})
+                    }
+                    else {
+                        setAlert({
+                            message: "Unable to fetch notifications."
+                        })
+                    }
+                }
+            } catch (err) {
+                console.error("Unable to fetch notifications.")
+                setAlert({
+                    message: "Unable to fetch notifications."
+                })
+            }
+        }
+
+        fetchNotifs()
+    }, [])
 
 
     function handleClick(){

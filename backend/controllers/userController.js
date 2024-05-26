@@ -286,7 +286,7 @@ const logout = async (req, res) => {
 const getNotifications = async (req, res) => {
     try{
         const notifications = req.user.notifications
-        res.status(200).json(notifications.reverse())
+        res.status(200).json({notifications : notifications})
     } catch(err) {
         res.status(400).json({error : err.message})
     }
