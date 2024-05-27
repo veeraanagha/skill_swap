@@ -6,6 +6,8 @@ import { useAlert } from '../utils/AlertProvider'
 import { checkToken } from '../utils/checkToken'
 import { useUser } from '../utils/UserProvider'
 import { useLoading } from '../utils/LoadingProvider'
+// import SkillSwap from '../../assets/SkillSwap.gif'
+import SkillSwap from '../../assets/SkillSwap.jpg'
 
 export default function Home() {
     const { alert, setAlert } = useAlert()
@@ -32,8 +34,10 @@ export default function Home() {
 
 return (
     <>
-        <div className='space-around flex justify-center items-center'>
-            <div className='min-w-80'>.</div>
+        <div className='space-around flex items-center'>
+            {/* <div className='min-w-80 relative'>
+                <img src={SkillSwap} className="mix-blend-multiply opacity-95 z-10"/>
+            </div> */}
             <div className="container">
                 <GetStartedBtn />
             </div>
