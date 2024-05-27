@@ -3,13 +3,16 @@ import Axios from 'axios'
 import UserListItem from './UserListItem'
 import { useAlert } from '../../utils/AlertProvider'
 import PageHeading from '../../utils/PageHeading'
+import { useLoading } from '../../utils/LoadingProvider'
 
 export default function Matches() {
   const [matches, setMatches] = useState([])
   const { alert, setAlert } = useAlert()
+  const { setIsLoading } = useLoading()
 
   useEffect(() => {
     async function getMatches() {
+      setIsLoading(true)
       try {
         const response = await Axios.get(`${import.meta.env.VITE_BACKEND_URL}user/matches`)
         if (response.status === 200) {
@@ -29,6 +32,7 @@ export default function Matches() {
           message: "Error fetching matches."
         })
       }
+      setIsLoading(false)
     }
 
     getMatches()
@@ -45,7 +49,7 @@ export default function Matches() {
                 <UserListItem key={index} user={user} />
               ))
             ) : (
-              <li className="text-center text-gray-500 dark:text-gray-400 py-4">No matches yet  : (</li>
+              <li className="h-screen text-center text-gray-500 dark:text-gray-400 py-4">No matches yet  : (</li>
             )}
           </ul>
         </div>

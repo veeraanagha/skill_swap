@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PageHeading from '../utils/PageHeading';
 import { useAlert } from '../utils/AlertProvider'
+import { useLoading } from '../utils/LoadingProvider';
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -12,6 +13,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const {alert, setAlert} = useAlert()
+  const {setIsLoading} = useLoading()
 
   const navigate = useNavigate();
 
@@ -19,6 +21,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    setIsLoading(true)
     try {
       const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/register`, {
         fname: firstName,
@@ -46,6 +49,7 @@ const Register = () => {
         message: "Failed to register user, please try again."
       })
     }
+    setIsLoading(false)
   };
 
   return (

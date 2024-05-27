@@ -5,15 +5,18 @@ import { checkToken } from '../checkToken.js'
 import Axios from 'axios'
 import { defaultUser } from '../defaultUser'
 import { useAlert } from '../AlertProvider'
+import { useLoading } from '../LoadingProvider.jsx'
 
 export default function Notification() {
     const [panelShown, setPanelShown] = useState(false)
     const {userData, setUserData} = useUser()
     const {alert, setAlert} = useAlert()
+    const { setIsLoading } = useLoading()
 
 
     useEffect(() => {
         const fetchNotifs = async() => {
+            setIsLoading(true)
             try{
                 if(checkToken()) {
                     const response = await Axios.get(`${import.meta.env.VITE_BACKEND_URL}user/notifications`)
@@ -32,6 +35,7 @@ export default function Notification() {
                     message: "Unable to fetch notifications."
                 })
             }
+            setIsLoading(false)
         }
 
         fetchNotifs()

@@ -7,6 +7,7 @@ import { defaultUser } from '../../utils/defaultUser'
 import { useAlert } from '../../utils/AlertProvider'
 import SkillRow from './SkillRow'
 import PageHeading from '../../utils/PageHeading'
+import { useLoading } from '../../utils/LoadingProvider'
 
 Axios.defaults.withCredentials = true
 
@@ -16,9 +17,11 @@ export default function Profile() {
     const navigate = useNavigate()
     const fieldsNotToDisplay = ['notifications', 'matches']
     const { alert, setAlert } = useAlert()
+    const { isLoading, setIsLoading} = useLoading()
 
     useEffect(() => {
         const handleFetch = async () => {
+            setIsLoading(true)
             try {
                 const response = await Axios.get(`${import.meta.env.VITE_BACKEND_URL}user/profile`)
 
@@ -39,6 +42,7 @@ export default function Profile() {
                         message: "Couldn't fetch profile."
                     })
                 }
+                setIsLoading(false)
             } catch (error) {
                 console.error('Fetching profile failed:', error.message)
                 setAlert({
@@ -48,7 +52,9 @@ export default function Profile() {
                 setUserData({ ...defaultUser })
                 console.log('Redirecting to login page.')
                 navigate('/user/login')
+                setIsLoading(false)
             }
+            setIsLoading(false)
         }
 
         handleFetch()
@@ -66,7 +72,7 @@ export default function Profile() {
 
     return (
         <div className="flex items-center justify-center w-full">
-
+            
             <div className='flex flex-col my-5'>
 
                 <PageHeading>Profile</PageHeading>

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import maleAvatar from '../../assets/avatar/male-default-avatar.png'
 import Axios from 'axios'
 import { useAlert } from '../utils/AlertProvider'
+import { useLoading } from '../utils/LoadingProvider';
 
 const UserProfileCard = ({ currProfile, showNext }) => {
 
     const [isAccepted, setIsAccepted] = useState('')
     const { alert, setAlert } = useAlert()
     const [id, setid] = useState(Date.now());
+    const {setIsLoading} = useLoading()
 
     function handleAccept() {
         console.log("Handling acceptance.")
@@ -26,6 +28,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
             console.log(`isAccepted : ${isAccepted}`) //////
             console.log(`username : ${currProfile.username}`) //////
             if (isAccepted !== '' && currProfile.username !== 'DEFAULT_USERNAME') {
+                setIsLoading(true)
                 try {
                     const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}swipe`, {
                         username: currProfile.username,
@@ -43,6 +46,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                 } catch (err) {
                     console.error('Sending swipe results to backend FAILED. :', err.message)
                 }
+                setIsLoading(false)
             }
             else {
                 console.log("isAccepted is blank or Default_user is set.")

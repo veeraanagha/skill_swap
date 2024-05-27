@@ -8,6 +8,7 @@ import Notification from './Notification';
 import Axios from 'axios'
 import { useAlert } from '../AlertProvider'
 import { checkToken } from '../checkToken';
+import { useLoading } from '../LoadingProvider';
 
 Axios.defaults.withCredentials = true
 
@@ -16,6 +17,7 @@ const Navbar = ({ isDark, setIsDark }) => {
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
   const { alert, setAlert } = useAlert()
+  const { setIsLoading } = useLoading()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 
@@ -30,12 +32,14 @@ const Navbar = ({ isDark, setIsDark }) => {
 
 
   const handleLogout = async () => {
+    setIsLoading(true)
     await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`)
     setUserData({ ...defaultUser })
     setAlert({
       message: "User logged out.",
       type: 'success'
     })
+    setIsLoading(false)
     navigate('/user/login')
   }
 

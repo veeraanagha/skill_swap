@@ -6,6 +6,7 @@ import PageHeading from '../utils/PageHeading';
 import { useUser } from '../utils/UserProvider'
 import { useAlert } from '../utils/AlertProvider';
 import { defaultUser } from '../utils/defaultUser';
+import { useLoading } from '../utils/LoadingProvider';
 
 Axios.defaults.withCredentials = true;
 
@@ -16,9 +17,11 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
     const { alert, setAlert } = useAlert()
+    const { setIsLoading } = useLoading()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true)
         try {
             const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/login`, {
                 email: email,
@@ -51,6 +54,7 @@ const Login = () => {
                 message: 'Login failed, please retry !'
             })
         }
+        setIsLoading(false)
     };
 
     return (

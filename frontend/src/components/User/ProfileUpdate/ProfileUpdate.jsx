@@ -7,6 +7,7 @@ import { defaultUser } from '../../utils/defaultUser'
 import { useAlert } from '../../utils/AlertProvider'
 import SkillRowEdit from './SkillRowEdit'
 import PageHeading from '../../utils/PageHeading'
+import { useLoading } from '../../utils/LoadingProvider'
 
 Axios.defaults.withCredentials = true
 
@@ -14,11 +15,13 @@ export default function ProfileUpdate() {
     const { userData, setUserData } = useUser()
     const [preSaveUserData, setPreSaveUserData] = useState({ ...userData })
     const { alert, setAlert } = useAlert()
+    const { setIsLoading } = useLoading()
     const navigate = useNavigate()
     const fieldsNotToDisplay = ['notifications', 'matches']
 
     useEffect(() => {
         const handleFetch = async () => {
+            setIsLoading(true)
             try {
                 const response = await Axios.get(`${import.meta.env.VITE_BACKEND_URL}user/profile`)
 
@@ -46,6 +49,7 @@ export default function ProfileUpdate() {
                 setUserData({ ...defaultUser })
                 navigate('/user/login')
             }
+            setIsLoading(false)
         }
 
         handleFetch()
