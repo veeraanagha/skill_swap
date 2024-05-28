@@ -16,10 +16,7 @@ const Navbar = ({ isDark, setIsDark }) => {
 
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
-<<<<<<< HEAD
-  const {alert, setAlert} = useAlert()
-  
-=======
+
   const { alert, setAlert } = useAlert()
   const { setIsLoading } = useLoading()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -35,7 +32,6 @@ const Navbar = ({ isDark, setIsDark }) => {
   }, [userData])
 
 
->>>>>>> 58c493a3faed4e0ca893042680255d9b1365a108
   const handleLogout = async () => {
     setIsLoading(true)
     await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`)
@@ -44,8 +40,10 @@ const Navbar = ({ isDark, setIsDark }) => {
       message: "User logged out.",
       type: 'success'
     })
+    setIsLoading(false)
     navigate('/user/login')
   }
+
 
   return (
     <nav className="select-none border-gray-200 bg-slate-200 dark:bg-gray-900 dark:border-gray-700">
@@ -74,21 +72,21 @@ const Navbar = ({ isDark, setIsDark }) => {
             </li>
 
             {isLoggedIn &&
-            <li>
+              <li>
                 <Notification />
-            </li>
+              </li>
             }
 
             {!isLoggedIn &&
-            <li>
-              <NavLink to="/home">Home</NavLink>
-            </li>
+              <li>
+                <NavLink to="/home">Home</NavLink>
+              </li>
             }
 
             {isLoggedIn &&
-            <li>
-              <NavLink to="/swipe">Swipe</NavLink>
-            </li>
+              <li>
+                <NavLink to="/swipe">Swipe</NavLink>
+              </li>
             }
 
             {isLoggedIn &&
@@ -98,9 +96,9 @@ const Navbar = ({ isDark, setIsDark }) => {
             }
 
             {isLoggedIn &&
-            <li>
-              <NavLink to="/user/profile">User</NavLink>
-            </li>
+              <li>
+                <NavLink to="/user/profile">User</NavLink>
+              </li>
             }
 
             <li>
