@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ThemeToggle from '../ThemeToggle';
 import NavLink from './Navlink';
 import { useUser } from '../UserProvider';
@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import Notification from './Notification';
 import Axios from 'axios'
 import { useAlert } from '../AlertProvider'
+import { checkToken } from '../checkToken';
+import { useLoading } from '../LoadingProvider';
 
 Axios.defaults.withCredentials = true
 
@@ -14,9 +16,28 @@ const Navbar = ({ isDark, setIsDark }) => {
 
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
+<<<<<<< HEAD
   const {alert, setAlert} = useAlert()
   
+=======
+  const { alert, setAlert } = useAlert()
+  const { setIsLoading } = useLoading()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+
+  useEffect(() => {
+    if (checkToken()) {
+      setIsLoggedIn(true)
+    }
+    else {
+      setIsLoggedIn(false)
+    }
+  }, [userData])
+
+
+>>>>>>> 58c493a3faed4e0ca893042680255d9b1365a108
   const handleLogout = async () => {
+    setIsLoading(true)
     await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`)
     setUserData({ ...defaultUser })
     setAlert({
@@ -52,24 +73,38 @@ const Navbar = ({ isDark, setIsDark }) => {
               <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
             </li>
 
+            {isLoggedIn &&
             <li>
-              {userData.username !== defaultUser.username && <Notification />}
+                <Notification />
             </li>
+            }
 
+            {!isLoggedIn &&
             <li>
               <NavLink to="/home">Home</NavLink>
             </li>
+            }
 
+            {isLoggedIn &&
             <li>
               <NavLink to="/swipe">Swipe</NavLink>
             </li>
+            }
 
+            {isLoggedIn &&
+              <li>
+                <NavLink to="/user/matches">Matches</NavLink>
+              </li>
+            }
+
+            {isLoggedIn &&
             <li>
               <NavLink to="/user/profile">User</NavLink>
             </li>
+            }
 
             <li>
-              {userData.username === defaultUser.username ? (
+              {!isLoggedIn ? (
                 <NavLink to="/user/login">
                   Login
                 </NavLink>

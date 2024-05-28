@@ -38,7 +38,7 @@ const login = async (req, res) => {
         const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
         if (userExists && passwordMatches) {
             const token = tokenize(userExists.username, userExists.email, expiresInMs)
-            res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs })
+            res.cookie('token', token, { httpOnly: false, maxAge: expiresInMs })
             // console.log(`token : ${token}`)
             console.log("\nUser logged in successfully.\n")
             const profile = {
@@ -54,9 +54,11 @@ const login = async (req, res) => {
             }
             return res.status(200).json(profile)
         } else {
+            res.clearCookie('token')
             return res.status(400).json("Invalid user  OR  wrong username-password ")
         }
     } catch (e) {
+        res.clearCookie('token')
         return res.status(500).json({message : e.message})
     }
 }
@@ -90,7 +92,6 @@ const registerUser = async (req, res) => {
     } catch (err) {
         res.status(400).json({ error: err.message })
     }
-
 }
 
 
@@ -161,7 +162,7 @@ const getMatches = async (req, res) => {
         if (matches.length > 0) {
             res.status(200).json(matches);
         } else {
-            res.status(200).json("No matches yet :(");
+            res.status(201).json("No matches yet :(");
         }
     } catch (err) {
         console.log("\nError finding matches !\n")
@@ -172,7 +173,7 @@ const getMatches = async (req, res) => {
 const editUserProfile = async (req, res) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     try {
-        const { fname, lname, email, username, bio } = req.body;
+        const { fname, lname, email, username, bio, skills, interests } = req.body;
         const userId = req.user._id;
 
         if (!emailRegex.test(email)) {
@@ -193,11 +194,11 @@ const editUserProfile = async (req, res) => {
             return res.status(400).json({ message: 'Email is already registered' });
         }
         
-        const updatedUser = await User.findByIdAndUpdate(userId, { fname, lname, username, bio, email }, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(userId, { fname, lname, username, bio, email, skills, interests }, { new: true });
 
         res.clearCookie('token')
         const token = tokenize(username, email)
-        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 * 1 })
+        res.cookie('token', token, { httpOnly: false, maxAge: 3600000 * 1 })
 
         return res.status(200).json({ message: 'Profile updated successfully' });
     } catch (e) {
@@ -276,6 +277,7 @@ const logout = async (req, res) => {
         res.clearCookie('token')
         res.status(200).json({message : 'Logged out successfully !'})
     } catch (err) {
+        res.clearCookie('token')
         res.status(400).json({message : "Failed to logout !"})
     }
 }
@@ -284,7 +286,7 @@ const logout = async (req, res) => {
 const getNotifications = async (req, res) => {
     try{
         const notifications = req.user.notifications
-        res.status(200).json(notifications.reverse())
+        res.status(200).json({notifications : notifications})
     } catch(err) {
         res.status(400).json({error : err.message})
     }

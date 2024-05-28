@@ -4,12 +4,12 @@ const {registerUser, viewProfile, getMatches, login, authCheck, editUserProfile,
 
 router.get('/matches', authCheck, getMatches)
 router.get('/notifications', authCheck, getNotifications)
+router.get('/profile', authCheck, viewProfile)
 
 router.put('/profile-update', authCheck, editUserProfile)
 router.put('/skills-update', authCheck, updateUserSkills)
 router.put('/interests-update', authCheck, updateUserInterests);
 
-router.post('/profile', authCheck, viewProfile)
 router.post('/logout', logout)
 router.post('/login', login)
 router.post('/register', registerUser)

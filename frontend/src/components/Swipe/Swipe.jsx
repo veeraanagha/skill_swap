@@ -4,6 +4,7 @@ import { defaultUser } from "../utils/defaultUser";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { useAlert } from '../utils/AlertProvider'
+import { useLoading } from "../utils/LoadingProvider";
 
 Axios.defaults.withCredentials = true
 
@@ -13,6 +14,7 @@ export default function Swipe() {
     const [index, setIndex] = useState(-1)
     const navigate = useNavigate()
     const { alert, setAlert } = useAlert()
+    const { isLoading, setIsLoading} = useLoading()
 
     function showNext() {
         console.log(`index = ${index}, list length = ${potentials.length}`)
@@ -40,6 +42,7 @@ export default function Swipe() {
 
     useEffect(() => {
         async function handleFetch() {
+            setIsLoading(true)
             try {
                 const response = await Axios.get(`${import.meta.env.VITE_BACKEND_URL}swipe`)
 
@@ -66,6 +69,7 @@ export default function Swipe() {
                     message: "Unhandled error."
                 })
             }
+            setIsLoading(false)
         }
 
         handleFetch()
@@ -74,13 +78,19 @@ export default function Swipe() {
 
     useEffect(() => {
         console.log("Potentials updated : ", potentials)
+        navigate('/swipe')
         showNext()
     }, [potentials])
 
 
     return (
         <div className="flex items-center justify-center">
-            <UserProfileCard currProfile={currProfile} showNext={showNext} />
+            {
+                potentials.length > 0 ?
+                    <UserProfileCard currProfile={currProfile} showNext={showNext} />
+                    :
+                    <div className="flex items-center justify-center h-screen text-center text-gray-500 dark:text-gray-400 py-4">You have run out of potential matches ! Come again later or Update you skills & interests.</div>
+            }
         </div>
     )
 }

@@ -1,7 +1,7 @@
-export default function DataRow({dataType, dataVal, preSaveUserData, setPreSaveUserData}) {
-    const keyValPairCss = "w-full flex justify-between my-2"
+export default function DataRow({ dataType, dataVal, preSaveUserData, setPreSaveUserData }) {
+    const keyValPairCss = "w-full flex justify-between my-3"
 
-    function handleChange(event){
+    function handleChange(event) {
         setPreSaveUserData({
             ...preSaveUserData,
             [dataType]: event.target.value
@@ -11,7 +11,11 @@ export default function DataRow({dataType, dataVal, preSaveUserData, setPreSaveU
     return (
         <div className={keyValPairCss}>
             <label className='text-lg text-black dark:text-black font-bold mr-4'>{dataType}</label>
-            <input className='px-3 border-2 rounded-lg border-black text-lg text-gray-900' value={preSaveUserData[dataType]} onChange={handleChange}/>
+            {dataType === 'bio' ?
+                <textarea className='min-h-36 w-80 w-min-64 px-2 py-0.5 border rounded-lg border-gray-400 text-lg text-gray-900' value={preSaveUserData[dataType]} onChange={handleChange} />
+                :
+                <input className='w-80 w-min-64 px-2 py-0.5 border rounded-lg border-gray-400 text-lg text-gray-900' value={preSaveUserData[dataType]} onChange={handleChange} />
+            }
         </div>
     )
 }
