@@ -15,7 +15,7 @@ const Navbar = ({ isDark, setIsDark }) => {
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
   const {alert, setAlert} = useAlert()
-
+  
   const handleLogout = async () => {
     await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`)
     setUserData({ ...defaultUser })
