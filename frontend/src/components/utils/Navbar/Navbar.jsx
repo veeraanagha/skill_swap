@@ -16,6 +16,7 @@ const Navbar = ({ isDark, setIsDark }) => {
 
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
+
   const { alert, setAlert } = useAlert()
   const { setIsLoading } = useLoading()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
