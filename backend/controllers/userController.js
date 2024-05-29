@@ -95,7 +95,7 @@ const registerUser = async (req, res) => {
 }
 
 
-// fetch a profile using ID or username
+// fetch a profile using ID or username (ONLY FOR LOGGEDIN USER)
 const viewProfile = async (req, res) => {
     try {
         // Fetching list of skills
@@ -293,5 +293,6 @@ const getNotifications = async (req, res) => {
 }
 
 
-module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests, logout, getNotifications}
+
+module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests, logout, getNotifications }
 
