@@ -19,7 +19,7 @@ app.use(cors({
     origin: function(origin, callback) {
         // Allow requests from all origins when in development
         // Replace this condition with your actual production origin check
-        if (!origin || origin.startsWith('http://localhost')) {
+        if (!origin || origin.startsWith('https://skillswapfrontend-himanshu-lilhore-projects.vercel.app')) {
             callback(null, true)
         } else {
             callback(new Error('Not allowed by CORS'))
