@@ -10,6 +10,7 @@ import User from "./components/User/User.jsx";
 import Profile from "./components/User/Profile/Profile.jsx";
 import Matches from "./components/User/Matches/Matches.jsx";
 import ProfileUpdate from "./components/User/ProfileUpdate/ProfileUpdate.jsx"
+import ViewProfile from "./components/utils/ViewProfile/ViewProfile.jsx";
 import Swipe from "./components/Swipe/Swipe.jsx";
 import Axios from 'axios';
 
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/swipe",
         element: <Swipe />
+      },
+      {
+        path: "/:username",
+        element: <ViewProfile />,
       }
     ],
   },

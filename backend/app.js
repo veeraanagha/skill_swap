@@ -39,6 +39,6 @@ app.use('/home', homeRouter)
 
 app.use('/swipe', swipeRouter) 
 
-app.use('/', utilRouter)
-
 app.use('/admin', adminRouter)  // For testing purposes  // can make a admin dashboard in future
+
+app.use('/', utilRouter)

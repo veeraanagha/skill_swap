@@ -49,7 +49,9 @@ export default function Matches() {
                 <UserListItem key={index} user={user} />
               ))
             ) : (
-              <li className="h-screen text-center text-gray-500 dark:text-gray-400 py-4">No matches yet  : (</li>
+              <div className='h-screen'>
+                <li className="max-h-lg text-center text-gray-500 dark:text-gray-400 py-4">No matches yet  : (</li>
+              </div>
             )}
           </ul>
         </div>

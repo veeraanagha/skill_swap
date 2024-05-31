@@ -1,86 +1,84 @@
+const detokenize = require('../utils/detokenizer');
 const Skill = require('../models/skillModel');
+const User = require('../models/userModel');
+const jwt = require('jsonwebtoken')
 
 const getAllSkills = async (req, res) => {
     try {
         const allSkills = await Skill.find()
-        res.status(200).json(allSkills)
+        return res.status(200).json(allSkills)
     } catch (err) {
-        res.status(400).json({ error: err.message })
+        return res.status(400).json({ error: err.message })
     }
 }
 
 
 const showProfileWithUsername = async (req, res) => {
     try {
-        let token
+        const username = req.params.id;
+        let isExternal = true;
+        let token;
+        let loggedinUserExists;
+        let decodedToken
+
+        const userExists = await User.findOne({ username: username })
+            .populate('skills')
+            .populate('interests');
+
+        if (!userExists) {
+            console.log("User not found!");
+            return res.status(404).json({ message: "User not found!" });
+        }
+
+        let profile = {
+            fname: userExists.fname,
+            lname: userExists.lname,
+            username: userExists.username,
+            skills: userExists.skills,
+            interests: userExists.interests,
+            bio: userExists.bio
+        }
 
         if (req.cookies === undefined) {
-            console.log("Cookies undefined, will view user as external")
-        }
-        else {
-            token = req.cookies.token
-            console.log(req.cookies)
-        }
-        try {
-            const decodedToken = detokenize(token)
+            console.log("Cookies undefined, will view user as external!");
+        } else {
+            token = req.cookies.token;
+            console.log(req.cookies);
 
-            const userExists = await User.findOne({ email: decodedToken.email, username: decodedToken.username })
+            try {
+                decodedToken = detokenize(token);
+            } catch (err) {
+                return res.status(200).json(profile)
+            }
 
-            if (userExists) console.log("\nSession authenticated successfully\n")
-
-            // auth gets user id of indv and passes it to next middleware attraching it to request.
-            req.body._id = userExists._id
-            req.user = userExists
-        }
-        catch(err) {
-            console.log(err)
-        }
-
-
-
-            
-        let query = ""
-
-        if (req.body._id) {
-            query = { _id: req.body._id };
-        } else if (req.body.username) {
-            query = { username: req.body.username };
-        }
-
-        let thisUser
-        if (query)
-            thisUser = await User.findOne(query).populate('skills').populate('interests');
-
-
-        if (!thisUser) {
-            return res.status(404).json({ error: 'User not found' })
-        }
-
-        const matchNames = await Promise.all(
-            thisUser.matches.map(async (element) => {
-                const user = await User.findOne({ _id: element })
-                return user.username
+            if(decodedToken)
+            loggedinUserExists = await User.findOne({
+                email: decodedToken.email,
+                username: decodedToken.username
             })
-        )
 
-
-        const profile = {
-            fname: thisUser.fname,
-            lname: thisUser.lname,
-            username: thisUser.username,
-            email: thisUser.email,
-            skills: thisUser.skills,
-            interests: thisUser.interests,
-            matches: matchNames,
-            bio: thisUser.bio,
-            notifications: thisUser.notifications
+            if (decodedToken && loggedinUserExists) {
+                isExternal = false;
+            } else {
+                console.log("Invalid cookies, will view user as external!");
+            }
         }
-        res.status(200).json(profile)
+
+
+        if (!isExternal && loggedinUserExists && loggedinUserExists.matches && loggedinUserExists.matches.includes(userExists._id)) {
+            profile = {
+                ...profile,
+                email: userExists.email
+            };
+        }
+
+        return res.status(200).json(profile);
+
     } catch (err) {
-        console.log("\nFailed to fetch user details !\n")
-        res.status(400).json({ error: err.message })
+        console.log("\nFailed to fetch user details!\n");
+        return res.status(500).json({ error: err });
     }
-}
+};
 
 
 

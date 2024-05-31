@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const {getAllSkills} = require('../controllers/utilController');
-const {authCheck, showProfileWithUsername} = require('../controllers/userController')
+const {getAllSkills, showProfileWithUsername} = require('../controllers/utilController')
 
 router.get('/skills', getAllSkills)
 
-router.get('/:id', authCheck, showProfileWithUsername)
+router.get('/:id', showProfileWithUsername)
 
 module.exports = router;
