@@ -38,7 +38,7 @@ const login = async (req, res) => {
         const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
         if (userExists && passwordMatches) {
             const token = tokenize(userExists.username, userExists.email, expiresInMs)
-            res.cookie('token', token, { httpOnly: false, maxAge: expiresInMs })
+            res.cookie('token', token, { httpOnly: false, maxAge: expiresInMs, sameSite: 'None' })
             // console.log(`token : ${token}`)
             console.log("\nUser logged in successfully.\n")
             const profile = {
@@ -198,7 +198,7 @@ const editUserProfile = async (req, res) => {
 
         res.clearCookie('token')
         const token = tokenize(username, email)
-        res.cookie('token', token, { httpOnly: false, maxAge: 3600000 * 1 })
+        res.cookie('token', token, { httpOnly: false, maxAge: 3600000 * 1, sameSite: 'None' })
 
         return res.status(200).json({ message: 'Profile updated successfully' });
     } catch (e) {

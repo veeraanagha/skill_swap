@@ -1,6 +1,5 @@
 require('dotenv').config()
 const express = require('express')
-const session = require('express-session')
 const connectDB = require('./config/db')
 const app = express()
 const userRouter = require('./routes/userRouter')
@@ -18,8 +17,6 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
     origin: function(origin, callback) {
-        // Allow requests from all origins when in development
-        // Replace this condition with your actual production origin check
         if (!origin || 
             origin.startsWith(process.env.FRONTEND_URL)) {
             callback(null, true)
@@ -30,18 +27,7 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(session({
-    secret: process.env.SECRET_KEY,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'None'
-    }
-  }))
 
-  
   app.use('/user', userRouter)
   
   app.use('/home', homeRouter)
