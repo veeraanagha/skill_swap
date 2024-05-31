@@ -44,7 +44,7 @@ export default function Profile() {
                 }
                 setIsLoading(false)
             } catch (error) {
-                console.error('Fetching profile failed:', error.message)
+                console.error('Fetching profile failed:', error)
                 setAlert({
                     message: "Fetching profile failed",
                     type: "warning"
