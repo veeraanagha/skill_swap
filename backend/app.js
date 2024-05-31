@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const session = require('express-session')
 const connectDB = require('./config/db')
 const app = express()
 const userRouter = require('./routes/userRouter')
@@ -29,17 +30,29 @@ app.use(cors({
     credentials: true
 }));
 
+app.use(session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None'
+    }
+  }))
 
-app.listen(PORT, ()=> {
-    console.log("server is running on ", PORT)
-})
+  
+  app.use('/user', userRouter)
+  
+  app.use('/home', homeRouter)
+  
+  app.use('/swipe', swipeRouter) 
+  
+  app.use('/admin', adminRouter)  // For testing purposes  // can make a admin dashboard in future
+  
+  app.use('/', utilRouter)
 
-app.use('/user', userRouter)
 
-app.use('/home', homeRouter)
-
-app.use('/swipe', swipeRouter) 
-
-app.use('/admin', adminRouter)  // For testing purposes  // can make a admin dashboard in future
-
-app.use('/', utilRouter)
+  app.listen(PORT, ()=> {
+      console.log("server is running on ", PORT)
+  })
