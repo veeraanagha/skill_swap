@@ -25,7 +25,7 @@ export default function Home() {
                     type: 'success'
                 })
                 console.log("Previous user logged out.")
-                setIsLoading(true)
+                setIsLoading(false)
             }
         }
 
@@ -34,7 +34,7 @@ export default function Home() {
 
 return (
     <>
-        <div className='space-around flex items-center'>
+        <div className='justify-around flex items-center'>
             {/* <div className='min-w-80 relative'>
                 <img src={SkillSwap} className="mix-blend-multiply opacity-95 z-10"/>
             </div> */}

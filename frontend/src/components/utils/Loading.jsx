@@ -2,8 +2,8 @@ import { bouncy } from 'ldrs'
 import { useLoading } from './LoadingProvider'
 
 export default function Loading() {
-    const {isLoading, setIsLoading} = useLoading()
-    
+    const { isLoading, setIsLoading } = useLoading()
+
     bouncy.register()
 
     const blurStyle = {
@@ -15,13 +15,18 @@ export default function Loading() {
     return (
         <>
             {isLoading &&
-                <div className='w-full h-full flex justify-center z-50 absolute' style={blurStyle}>
-                    <div className='mt-60'>
-                        <l-bouncy
-                            size="60"
-                            speed="1.75"
-                            color="#3b82f6"
-                        ></l-bouncy>
+                <div>
+                    {/* blur screen */}
+                    <div aria-hidden="true" className="fixed z-40 w-screen h-screen top-0 left-0" style={blurStyle}></div>
+
+                    <div className='w-screen h-screen flex justify-center z-50 absolute'>
+                        <div className='mt-60'>
+                            <l-bouncy
+                                size="60"
+                                speed="1.75"
+                                color="#3b82f6"
+                            ></l-bouncy>
+                        </div>
                     </div>
                 </div>
             }
