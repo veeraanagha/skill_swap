@@ -3,12 +3,12 @@ import ThemeToggle from '../ThemeToggle';
 import NavLink from './Navlink';
 import { useUser } from '../UserProvider';
 import { defaultUser } from '../defaultUser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Notification from './Notification';
 import Axios from 'axios'
 import { useAlert } from '../AlertProvider'
 import { checkToken } from '../checkToken';
-import { useLoading } from '../LoadingProvider';
+import { useLoading } from '../LoadingProvider'
 
 Axios.defaults.withCredentials = true
 
@@ -16,6 +16,7 @@ const Navbar = ({ isDark, setIsDark }) => {
 
   const { userData, setUserData } = useUser()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { alert, setAlert } = useAlert()
   const { setIsLoading } = useLoading()
@@ -51,9 +52,12 @@ const Navbar = ({ isDark, setIsDark }) => {
   return (
     <nav className="select-none border-gray-200 bg-slate-200 dark:bg-gray-900 dark:border-gray-700">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-          Skill<span className="text-blue-600 dark:text-blue-500">Swap</span>.
-        </h1>
+
+        {location.pathname !== '/home' &&
+          <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            Skill<span className="text-blue-600 dark:text-blue-500">Swap</span>.
+          </h1>
+        }
 
         <button
           data-collapse-toggle="navbar-solid-bg"

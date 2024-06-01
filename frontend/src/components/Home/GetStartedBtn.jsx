@@ -4,7 +4,7 @@ import './GetStartedBtn.css';
 
 function GetStartedBtn() {
     return (
-        <div className="flex flex-col justify-center items-center scale-50">
+        <div className="flex justify-center items-center scale-50">
             <Link to="/user/register">
                 <button className="getStarted">Get started!</button>
             </Link>
