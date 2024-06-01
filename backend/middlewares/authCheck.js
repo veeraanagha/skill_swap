@@ -26,7 +26,7 @@ const authCheck = async (req, res, next) => {
             console.error("\nToken expired\n")
 
             res.clearCookie('token')
-            return res.status(200).json({ message: "Session expired, please login again !" })
+            return res.status(400).json({ message: "Session expired, please login again !" })
         }
         else if(error.name === 'JsonWebTokenError'){
             console.error("\nInvalid token OR No token found !\n")
@@ -44,4 +44,4 @@ const authCheck = async (req, res, next) => {
     }
 }
 
-module.exports = authCheck;
+module.exports = {authCheck};

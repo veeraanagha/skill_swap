@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests, logout, getNotifications} = require('../controllers/userController');
+const {registerUser, viewProfile, getMatches, login, editUserProfile, updateUserSkills, updateUserInterests, logout, getNotifications} = require('../controllers/userController')
+const {authCheck} = require('../middlewares/authCheck')
 
 router.get('/matches', authCheck, getMatches)
 router.get('/notifications', authCheck, getNotifications)

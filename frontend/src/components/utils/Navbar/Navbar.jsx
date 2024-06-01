@@ -23,12 +23,15 @@ const Navbar = ({ isDark, setIsDark }) => {
 
 
   useEffect(() => {
-    if (checkToken()) {
-      setIsLoggedIn(true)
+    async function check() {
+      if (await checkToken()) {
+        setIsLoggedIn(true)
+      }
+      else {
+        setIsLoggedIn(false)
+      }
     }
-    else {
-      setIsLoggedIn(false)
-    }
+    check()
   }, [userData])
 
 

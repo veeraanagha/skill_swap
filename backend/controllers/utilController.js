@@ -81,5 +81,15 @@ const showProfileWithUsername = async (req, res) => {
 };
 
 
+const verifyToken = async (req, res) => {
+    try {
+        console.log("Verified token for frontend !")
+        return res.status(200).json({ message : "Token verified !" })
+    } catch (err) {
+        console.log("Failed to verify token")
+        return res.status(400).json({ error: err })
+    }
+}
 
-module.exports = { getAllSkills, showProfileWithUsername }
+
+module.exports = { getAllSkills, showProfileWithUsername, verifyToken }

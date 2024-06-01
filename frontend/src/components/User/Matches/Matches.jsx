@@ -39,18 +39,18 @@ export default function Matches() {
   }, [])
 
   return (
-    <div className='flex item-center justify-center w-full'>
+    <div className='flex item-center justify-center w-full min-h-96'>
       <div className='max-w-xl flex flex-col my-5'>
         <PageHeading>Matches</PageHeading>
-        <div className="w-full min-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-5 p-5 overflow-hidden">
+        <div className="w-full min-w-64 border border-gray-200 rounded-lg shadow dark:border-gray-700 mb-5 p-5 overflow-hidden bg-white dark:bg-gray-800">
           <ul className="min-w-96 divide-y divide-gray-200 dark:divide-gray-700">
             {matches.length > 0 ? (
               matches.map((user, index) => (
                 <UserListItem key={index} user={user} />
               ))
             ) : (
-              <div className='h-screen'>
-                <li className="max-h-lg text-center text-gray-500 dark:text-gray-400 py-4">No matches yet  : (</li>
+              <div className='text-white'>
+                <li className="text-center py-4">No matches yet  : (</li>
               </div>
             )}
           </ul>

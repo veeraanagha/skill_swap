@@ -38,7 +38,7 @@ const login = async (req, res) => {
         const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
         if (userExists && passwordMatches) {
             const token = tokenize(userExists.username, userExists.email, expiresInMs)
-            res.cookie('token', token, { httpOnly: false, maxAge: expiresInMs, sameSite: 'None', secure: process.env.NODE_ENV === 'PROD' })
+            res.cookie('token', token, { httpOnly: false, maxAge: expiresInMs, sameSite: 'None', secure: true })
             // console.log(`token : ${token}`)
             console.log("\nUser logged in successfully.\n")
             const profile = {
@@ -198,7 +198,7 @@ const editUserProfile = async (req, res) => {
 
         res.clearCookie('token')
         const token = tokenize(username, email)
-        res.cookie('token', token, { httpOnly: false, maxAge: 3600000 * 1, sameSite: 'None', secure: process.env.NODE_ENV === 'PROD' })
+        res.cookie('token', token, { httpOnly: false, maxAge: 3600000 * 1, sameSite: 'None', secure: true })
 
         return res.status(200).json({ message: 'Profile updated successfully' });
     } catch (e) {
@@ -294,5 +294,5 @@ const getNotifications = async (req, res) => {
 
 
 
-module.exports = { registerUser, viewProfile, getMatches, login, authCheck, editUserProfile, updateUserSkills, updateUserInterests, logout, getNotifications }
+module.exports = { registerUser, viewProfile, getMatches, login, editUserProfile, updateUserSkills, updateUserInterests, logout, getNotifications }
 
