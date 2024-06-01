@@ -20,7 +20,7 @@ async function getUniqueUsername() {
 const login = async (req, res) => {
     try {
         const allSkills = await Skill.find()
-        
+
         const userExists = await User.findOne({ email: req.body.email })
         if (!userExists) {
             return res.status(401).send("User does not exist")
@@ -38,7 +38,7 @@ const login = async (req, res) => {
         const expiresInMs = 3600000 * 1  // 1 hr = 3600000 ms
         if (userExists && passwordMatches) {
             const token = tokenize(userExists.username, userExists.email, expiresInMs)
-            res.cookie('token', token, { httpOnly: false, maxAge: expiresInMs, sameSite: 'None', secure: true })
+            res.cookie('token', token, { httpOnly: true, maxAge: expiresInMs, sameSite: 'None', secure: true })
             // console.log(`token : ${token}`)
             console.log("\nUser logged in successfully.\n")
             const profile = {
@@ -54,12 +54,20 @@ const login = async (req, res) => {
             }
             return res.status(200).json(profile)
         } else {
-            res.clearCookie('token')
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'None'
+            })
             return res.status(400).json("Invalid user  OR  wrong username-password ")
         }
     } catch (e) {
-        res.clearCookie('token')
-        return res.status(500).json({message : e.message})
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+        })
+        return res.status(500).json({ message: e.message })
     }
 }
 
@@ -180,8 +188,8 @@ const editUserProfile = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email format' });
         }
 
-        if(username.length > 15 || username < 4){
-            return res.status(400).json({ message: 'Username should be between 3 and 15 characters in length' }); 
+        if (username.length > 15 || username < 4) {
+            return res.status(400).json({ message: 'Username should be between 3 and 15 characters in length' });
         }
 
         const existingUser = await User.findOne({ username: username, _id: { $ne: userId } });
@@ -193,16 +201,20 @@ const editUserProfile = async (req, res) => {
         if (existingEmail) {
             return res.status(400).json({ message: 'Email is already registered' });
         }
-        
+
         const updatedUser = await User.findByIdAndUpdate(userId, { fname, lname, username, bio, email, skills, interests }, { new: true });
 
-        res.clearCookie('token')
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+        })
         const token = tokenize(username, email)
-        res.cookie('token', token, { httpOnly: false, maxAge: 3600000 * 1, sameSite: 'None', secure: true })
+        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 * 1, sameSite: 'None', secure: true })
 
         return res.status(200).json({ message: 'Profile updated successfully' });
     } catch (e) {
-        return res.status(400).json({message: e});
+        return res.status(400).json({ message: e });
     }
 }
 
@@ -273,22 +285,30 @@ const updateUserInterests = async (req, res) => {
 
 
 const logout = async (req, res) => {
-    try{
-        res.clearCookie('token')
-        res.status(200).json({message : 'Logged out successfully !'})
+    try {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+        })
+        res.status(200).json({ message: 'Logged out successfully !' })
     } catch (err) {
-        res.clearCookie('token')
-        res.status(400).json({message : "Failed to logout !"})
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+        })
+        res.status(400).json({ message: "Failed to logout !" })
     }
 }
 
 
 const getNotifications = async (req, res) => {
-    try{
+    try {
         const notifications = req.user.notifications
-        res.status(200).json({notifications : notifications})
-    } catch(err) {
-        res.status(400).json({error : err.message})
+        res.status(200).json({ notifications: notifications })
+    } catch (err) {
+        res.status(400).json({ error: err.message })
     }
 }
 
