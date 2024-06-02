@@ -4,7 +4,7 @@ const User = require('../models/userModel')
 const homeController = async (req, res)=> {
     try{
         const totalUsers = await User.countDocuments()
-        res.status(201).json(totalUsers)
+        res.status(200).json(totalUsers)
     } catch(err) {
         res.status(400).json({error:err.message})
         console.log(err)

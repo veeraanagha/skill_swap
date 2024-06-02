@@ -24,7 +24,7 @@ const Register = () => {
     if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
       setAlert({
         message: 'Name should only contain letters.',
-        type: 'error'
+        type: 'warning'
       });
       return false;
     }
@@ -34,17 +34,17 @@ const Register = () => {
     if (!emailRegex.test(email)) {
       setAlert({
         message: 'Invalid email address.',
-        type: 'error'
+        type: 'warning'
       });
       return false;
     }
 
     // Validate password
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{7,}$/;
     if (!passwordRegex.test(password)) {
       setAlert({
-        message: 'Password must be at least 7 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
-        type: 'error'
+        message: 'Password must be at least 7 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character .@$!%*?&',
+        type: 'warning'
       });
       return false;
     }
@@ -53,7 +53,7 @@ const Register = () => {
     if (password !== repeatPassword) {
       setAlert({
         message: 'Passwords do not match.',
-        type: 'error'
+        type: 'warning'
       });
       return false;
     }
@@ -62,7 +62,7 @@ const Register = () => {
     if (bio.length < 20) {
       setAlert({
         message: 'Bio must be at least 20 characters long.',
-        type: 'error'
+        type: 'warning'
       });
       return false;
     }
