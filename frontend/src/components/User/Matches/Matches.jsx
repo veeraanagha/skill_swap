@@ -42,7 +42,7 @@ export default function Matches() {
     <div className='flex item-center justify-center w-full min-h-96'>
       <div className='max-w-xl flex flex-col my-5'>
         <PageHeading>Matches</PageHeading>
-        <div className="w-full min-w-64 border border-gray-200 rounded-lg shadow dark:border-gray-700 mb-5 p-5 overflow-hidden bg-white dark:bg-gray-800">
+        <div className="w-full min-w-64 border border-gray-200 rounded-lg shadow dark:border-gray-700 mb-5 p-5 overflow-hidden bg-slate-200 dark:bg-gray-900">
           <ul className="min-w-96 divide-y divide-gray-200 dark:divide-gray-700">
             {matches.length > 0 ? (
               matches.map((user, index) => (

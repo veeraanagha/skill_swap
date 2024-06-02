@@ -42,7 +42,7 @@ export default function SkillRowEdit({ dataType, dataVal, preSaveUserData, setPr
 
     return (
         <div className={keyValPairCss}>
-            <label className='text-lg text-black dark:text-black font-bold mr-6'>{dataType}</label>
+            <label className='text-lg text-black dark:text-gray-200 font-bold mr-6'>{dataType}</label>
 
             <div className="flex flex-col">
                 <div className="flex flex-wrap justify-end">

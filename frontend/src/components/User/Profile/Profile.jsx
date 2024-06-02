@@ -77,10 +77,10 @@ export default function Profile() {
 
                 <PageHeading>Profile</PageHeading>
 
-                <div className="w-full max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-5">
+                <div className="w-full max-w-lg border border-gray-200 rounded-lg shadow bg-slate-200 dark:bg-gray-900 dark:border-gray-700 mb-5">
                     <div className="flex flex-col items-center p-10">
 
-                        <h1 className="text-right mb-1 text-xl font-medium text-gray-900 dark:text-white w-full">{`@ ${userData.username.toLowerCase()}`}</h1>
+                        <h1 className="text-right mb-1 text-xl font-bold text-gray-900 dark:text-white w-full">{`@ ${userData.username.toLowerCase()}`}</h1>
 
 
                         <div className="flex flex-col justify-between items-center py-5 w-full">

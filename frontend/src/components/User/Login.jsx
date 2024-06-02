@@ -22,9 +22,10 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        let response
         setIsLoading(true)
         try {
-            const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/login`, {
+            response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/login`, {
                 email: email,
                 password: password,
             })
@@ -37,30 +38,41 @@ const Login = () => {
                 })
                 setUserData({ ...defaultUser, ...response.data })
                 navigate("/user/profile")
-            } else if (response.status === 401) {
-                setAlert({
-                    message: "Wrong email or password."
-                })
-            } else {
-                console.log("Redirect not working!")
-                setAlert({
-                    message: "Couldn't redirect to login page."
-                })
             }
 
-
         } catch (error) {
-            console.error('Login failed', error.response.data)
-            setAlert({
-                message: 'Login failed, please retry !'
-            })
+            console.error('Login failed', error.message);
+            if (error.response) {
+                if (error.response.status === 404) {
+                    setAlert({
+                        message: "User does not exist.",
+                        type: 'error'
+                    });
+                } else if (error.response.status === 401) {
+                    setAlert({
+                        message: "Wrong password or email address.",
+                        type: 'error'
+                    });
+                } else {
+                    setAlert({
+                        message: "An error occurred. Please try again.",
+                        type: 'error'
+                    });
+                }
+            } else {
+                setAlert({
+                    message: "An error occurred. Please try again.",
+                    type: 'error'
+                });
+            }
         }
+        
         setIsLoading(false)
     };
 
     return (
         <div className='flex justify-around items-center text-black dark:text-white px-14'>
-            <div className='w-1/2 p-16' style={{scale:'1.1'}}>
+            <div className='w-1/2 p-16' style={{ scale: '1.1' }}>
                 <LoginImg />
             </div>
 
@@ -75,7 +87,7 @@ const Login = () => {
                     <input
                         type="email"
                         id="email"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-slate-200 dark:bg-gray-900 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="name@email.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +101,7 @@ const Login = () => {
                     <input
                         type="password"
                         id="password"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-slate-200 dark:bg-gray-900 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required

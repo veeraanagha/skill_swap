@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PageHeading from '../utils/PageHeading';
-import { useAlert } from '../utils/AlertProvider'
+import { useAlert } from '../utils/AlertProvider';
 import { useLoading } from '../utils/LoadingProvider';
 import RegisterImg from '../../assets/RegisterImg';
 
@@ -13,16 +13,71 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-  const { alert, setAlert } = useAlert()
-  const { setIsLoading } = useLoading()
+  const { alert, setAlert } = useAlert();
+  const { setIsLoading } = useLoading();
 
   const navigate = useNavigate();
 
-  // TODO: write check to verify password & renter password matches
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const validateForm = () => {
+    // Validate name
+    const nameRegex = /^[A-Za-z]+$/;
+    if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+      setAlert({
+        message: 'Name should only contain letters.',
+        type: 'error'
+      });
+      return false;
+    }
 
-    setIsLoading(true)
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setAlert({
+        message: 'Invalid email address.',
+        type: 'error'
+      });
+      return false;
+    }
+
+    // Validate password
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,}$/;
+    if (!passwordRegex.test(password)) {
+      setAlert({
+        message: 'Password must be at least 7 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
+        type: 'error'
+      });
+      return false;
+    }
+
+    // Check if passwords match
+    if (password !== repeatPassword) {
+      setAlert({
+        message: 'Passwords do not match.',
+        type: 'error'
+      });
+      return false;
+    }
+
+    // Validate bio
+    if (bio.length < 20) {
+      setAlert({
+        message: 'Bio must be at least 20 characters long.',
+        type: 'error'
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}user/register`, {
         fname: firstName,
@@ -30,33 +85,33 @@ const Register = () => {
         bio: bio,
         email: email,
         password: password,
-      })
+      });
 
       if (response.status === 200) {
-        navigate("/user/login")
+        navigate("/user/login");
       } else {
         console.log("Redirect not working");
       }
 
-      console.log('Registration successful', response.data)
+      console.log('Registration successful', response.data);
       setAlert({
         message: "Registration successful.",
         type: 'success'
-      })
+      });
 
     } catch (error) {
-      console.error('Registration failed', error.response.data)
+      console.error('Registration failed', error.message);
       setAlert({
         message: "Failed to register user, please try again."
-      })
+      });
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   return (
     <div className="flex justify-around items-center text-black dark:text-white px-28">
 
-      <div className='w-1/2 mr-14' style={{scale:'0.9'}}>
+      <div className='w-1/2 mr-14' style={{ scale: '0.9' }}>
         <RegisterImg />
       </div>
 
@@ -78,7 +133,7 @@ const Register = () => {
               />
               <label
                 htmlFor="floating_first_name"
-                className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0  peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 First name
               </label>
@@ -96,7 +151,7 @@ const Register = () => {
               />
               <label
                 htmlFor="floating_last_name"
-                className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0  peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 Last name
               </label>
@@ -135,7 +190,7 @@ const Register = () => {
             />
             <label
               htmlFor="floating_password"
-              className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0  peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Password
             </label>
@@ -154,7 +209,7 @@ const Register = () => {
             />
             <label
               htmlFor="floating_repeat_password"
-              className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0  peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Confirm password
             </label>
@@ -170,7 +225,7 @@ const Register = () => {
             ></textarea>
             <label
               htmlFor="bio"
-              className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0  peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-700 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Bio
             </label>
@@ -184,13 +239,9 @@ const Register = () => {
             Submit
           </button>
         </div>
-
-
       </div>
-
     </div>
   );
-
 };
 
 export default Register;
