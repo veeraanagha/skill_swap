@@ -1,8 +1,10 @@
 import Axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useAlert } from '../utils/AlertProvider'
 
 export default function RegtdUsers() {
-    const [users, setUsers] = useState(69)
+    const [users, setUsers] = useState('⌛')
+    const {alert, setAlert} = useAlert()
 
     useEffect(() => {
         const fetchRegtdUsers = async () => {
