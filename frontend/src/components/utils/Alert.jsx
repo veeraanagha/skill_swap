@@ -16,7 +16,7 @@ function Alert() {
         } 
         setTimeout(() => {
             setVisible(false)
-        }, 5000)
+        }, 6000)
 
     }, [alert.id])
 
