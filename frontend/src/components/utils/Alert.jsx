@@ -5,16 +5,18 @@ import { useAlert } from './AlertProvider';
 function Alert() {
     const [visible, setVisible] = useState(false)
     const {alert ,setAlert} = useAlert()
+    let myTimeout
 
     useEffect(() => {
         console.log("alert was triggered.")
         if(alert.message === "clear"){
             setVisible(false)
+            clearTimeout(myTimeout)
         }
         else if(alert.message){
             setVisible(true)
         } 
-        setTimeout(() => {
+        myTimeout = setTimeout(() => {
             setVisible(false)
         }, 6000)
 
