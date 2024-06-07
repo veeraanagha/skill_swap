@@ -59,7 +59,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
 
 
     return (
-        <div className="w-full max-w-md border border-gray-200 rounded-lg shadow bg-slate-200 dark:bg-gray-900 dark:border-gray-700 my-10">
+        <div className="w-full max-w-md border-2 border-blue-600 dark:border-blue-500 rounded-lg shadow bg-slate-200 dark:bg-gray-900 my-10">
             <div className="flex flex-col items-center p-10">
                 <div className="flex flex-col items-center p-5">
                     <img
@@ -68,7 +68,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                         alt="Default avatar"
                     />
 
-                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{`@ ${currProfile.username.toLowerCase()}`}</h5>
+                    <h5 className="mb-1 text-xl font-medium text-blue-600 dark:text-blue-500">{`@ ${currProfile.username.toLowerCase()}`}</h5>
 
                     <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.fname} ${currProfile.lname}`}</span>
                 </div>
