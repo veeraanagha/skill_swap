@@ -3,24 +3,30 @@ import maleAvatar from '../../assets/avatar/male-default-avatar.png'
 import Axios from 'axios'
 import { useAlert } from '../utils/AlertProvider'
 import { useLoading } from '../utils/LoadingProvider';
+import { useNavigate } from 'react-router-dom'
 
 const UserProfileCard = ({ currProfile, showNext }) => {
 
     const [isAccepted, setIsAccepted] = useState('')
     const { alert, setAlert } = useAlert()
     const [id, setid] = useState(Date.now());
-    const {setIsLoading} = useLoading()
+    const { setIsLoading } = useLoading()
+    const navigate = useNavigate()
 
     function handleAccept() {
         console.log("Handling acceptance.")
         setIsAccepted(true)
         setid(Date.now());
     }
-    
+
     function handleReject() {
         console.log("Handling rejection.")
         setIsAccepted(false)
         setid(Date.now());
+    }
+
+    function handleClick() {
+        navigate(`/${currProfile.username}`)
     }
 
     useEffect(() => {
@@ -68,19 +74,19 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                         alt="Default avatar"
                     />
 
-                    <h5 className="mb-1 text-xl font-medium text-blue-600 dark:text-blue-500">{`@ ${currProfile.username.toLowerCase()}`}</h5>
+                    <button onClick={handleClick} className="mb-1 text-xl font-medium text-blue-600 dark:text-blue-500">{`@ ${currProfile.username.toLowerCase()}`}</button>
 
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.fname} ${currProfile.lname}`}</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-300">{`${currProfile.fname} ${currProfile.lname}`}</span>
                 </div>
 
                 <div className='flex flex-col justify-left mt-1'>
                     <div className='flex flex-col justify-left'>
-                    <span className="text-sm text-black dark:text-gray-200 font-medium mb-3">About : </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{`${currProfile.bio}`}</span>
+                        <span className="text-sm text-gray-500 mb-3">About</span>
+                        <span className="text-sm text-black dark:text-gray-200">{`${currProfile.bio}`}</span>
                     </div>
 
                     <div className='flex flex-col justify-left my-5'>
-                        <span className="text-sm text-black dark:text-gray-200 font-medium mb-3">Skills : </span>
+                        <span className="text-sm text-gray-500 mb-3">Skills</span>
                         <div className="flex flex-wrap justify-left">
                             {currProfile.skills.map((element, key) => {
                                 return <label key={key} className='rounded-full text-black bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium text-sm px-4 py-2 text-center me-2 mb-2'>{element}</label>
@@ -89,7 +95,7 @@ const UserProfileCard = ({ currProfile, showNext }) => {
                     </div>
 
                     <div className='flex flex-col justify-between'>
-                        <span className="text-sm text-black dark:text-gray-200 font-medium mb-3">Interests : </span>
+                        <span className="text-sm text-gray-500 mb-3">Interests</span>
                         <div className="flex flex-wrap justify-left">
                             {currProfile.interests.map((element, key) => {
                                 return <label key={key} className='rounded-full text-black bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium text-sm px-4 py-2 text-center me-2 mb-2'>{element}</label>

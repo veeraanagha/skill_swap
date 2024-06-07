@@ -75,7 +75,7 @@ export default function ViewProfile({ children }) {
 
                 <PageHeading>{`@ ${userData.username.toLowerCase()}`}</PageHeading>
 
-                <div className="w-full max-w-xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-5">
+                <div className="w-full max-w-lg border-2 border-blue-600 dark:border-blue-500 rounded-lg shadow bg-slate-200 dark:bg-gray-900 mb-5">
                     <div className="flex flex-col items-center p-10">
 
                         <div className="flex flex-col items-center p-5">
